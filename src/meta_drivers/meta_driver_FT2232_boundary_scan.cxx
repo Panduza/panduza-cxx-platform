@@ -24,7 +24,7 @@ void MetaDriverFT2232BoundaryScan::setup()
 
 // ============================================================================
 //
-void MetaDriverFT2232BoundaryScan::startIo(std::string io_list)
+void MetaDriverFT2232BoundaryScan::startIo()
 {
     // Kill all reloadable instances
     mMetaplatformInstance->clearReloadableInterfaces();
@@ -46,7 +46,7 @@ void MetaDriverFT2232BoundaryScan::startIo(std::string io_list)
 
     // get some variable and key point
     const Json::Value interface_json = getInterfaceTree();
-    const Json::Value repeated_json = interface_json[io_list];
+    const Json::Value repeated_json = interface_json["repeated"];
     const std::string format = "%r";
     const size_t posFormat = interface_json["name"].asString().find(format);
 
@@ -97,15 +97,15 @@ std::shared_ptr<JtagFT2232> MetaDriverFT2232BoundaryScan::createJtagManager(std:
 //
 void MetaDriverFT2232BoundaryScan::sendInfo()
 {
-    // Create the info payload
-    Json::Value info;
-    info["type"] = "Group";
-    info["version"] = "1.0";
+    // // Create the info payload
+    // Json::Value info;
+    // info["type"] = "Group";
+    // info["version"] = "1.0";
 
-    LOG_F(4, "Info sent is : %s", info.toStyledString().c_str());
+    // LOG_F(4, "Info sent is : %s", info.toStyledString().c_str());
 
-    // publish the message info to the mqtt server for the pin
-    publish(getBaseTopic() + "/info", info, 0, false);
+    // // publish the message info to the mqtt server for the pin
+    // publish(getBaseTopic() + "/info", info, 0, false);
 }
 
 // ============================================================================

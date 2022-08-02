@@ -30,7 +30,7 @@ public:
     void setup();
 
     /// Start the creation of Io Meta Driver
-    void startIo(std::string io_list);
+    void startIo();
 
     /// Return JtagManager Object
     std::shared_ptr<JtagFT2232> getJtagManager();

@@ -19,11 +19,9 @@ MetaDriverFT2232BsdlLoader::MetaDriverFT2232BsdlLoader(MetaDriverFT2232BoundaryS
 void MetaDriverFT2232BsdlLoader::setup()
 {
     // Subscribe to the different topic needed direction and value separated because of retained not coming in the good order
-    subscribe(getBaseTopic() + "/File/cmds/#", 0);
-    subscribe(getBaseTopic() + "/File/atts/content", 0);
-    subscribe(getBaseTopic() + "/File/atts/data", 0);
-
-    std::string io_list = "repeated_artys7";
+    subscribe(getBaseTopic() + "/Bsdl_File/cmds/#", 0);
+    subscribe(getBaseTopic() + "/Bsdl_File/atts/content", 0);
+    subscribe(getBaseTopic() + "/Bsdl_File/atts/data", 0);
 
     // Try to open the BSDL
     std::ifstream bsdl_file(getDriverName() + ".bsdl", std::ifstream::binary);
@@ -34,7 +32,7 @@ void MetaDriverFT2232BsdlLoader::setup()
         LOG_F(INFO, "BSDL File found, loading the BSDL...");
         mMetaDriverFT2232BoundaryScanInstance->setBSDLName(getDriverName() + ".bsdl");
         mMetaDriverFT2232BoundaryScanInstance->setProbeName(getProbeName());
-        mMetaDriverFT2232BoundaryScanInstance->startIo(io_list);
+        mMetaDriverFT2232BoundaryScanInstance->startIo();
     }
 }
 
@@ -74,7 +72,7 @@ void MetaDriverFT2232BsdlLoader::message_arrived(mqtt::const_message_ptr msg)
     {
         Json::Value parsedMsg = parseMsg(msg->get_payload());
 
-        if (msg->get_topic().find("/File/cmds/content/set") != std::string::npos)
+        if (msg->get_topic().find("/cmds/content/set") != std::string::npos)
         {
             int content_size = parsedMsg["content"].asString().size();
             
@@ -90,8 +88,8 @@ void MetaDriverFT2232BsdlLoader::message_arrived(mqtt::const_message_ptr msg)
             payload["crc"] = crc32hex.str();
             
             // Send payloads to atts
-            publish(getBaseTopic() + "/File/atts/data", payload, 0, true);
-            publish(getBaseTopic() + "/File/atts/content", parsedMsg, 0, true);
+            publish(getBaseTopic() + "/Bsdl_File/atts/data", payload, 0, true);
+            publish(getBaseTopic() + "/Bsdl_File/atts/content", parsedMsg, 0, true);
 
             // Get encoded message
             std::string encoded_message = parsedMsg["content"].asString();
@@ -109,11 +107,8 @@ void MetaDriverFT2232BsdlLoader::message_arrived(mqtt::const_message_ptr msg)
             mMetaDriverFT2232BoundaryScanInstance->setBSDLName(mBSDLName);
             mMetaDriverFT2232BoundaryScanInstance->setProbeName(getProbeName());
 
-            // send the name of the list from the json
-            std::string io_list_name = parsedMsg["Io_List"].asString();
-
             // Start the Ios
-            mMetaDriverFT2232BoundaryScanInstance->startIo(io_list_name);
+            mMetaDriverFT2232BoundaryScanInstance->startIo();
         }
     }
 }
