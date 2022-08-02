@@ -23,8 +23,14 @@ void MetaDriverFT2232BsdlLoader::setup()
     subscribe(getBaseTopic() + "/Bsdl_File/atts/content", 0);
     subscribe(getBaseTopic() + "/Bsdl_File/atts/data", 0);
 
+    Json::Value interface_tree = getInterfaceTree();
+    std::string probe_name = interface_tree["settings"]["probe_name"].asString();
+    int serial_start_index = interface_tree["settings"]["probe_name"].asString().find(" FT") + 1;
+    int probe_name_size = interface_tree["settings"]["probe_name"].size();
+    std::string probe_serial_no = probe_name.substr( serial_start_index, probe_name_size - serial_start_index);
+
     // Try to open the BSDL
-    std::ifstream bsdl_file(getDriverName() + ".bsdl", std::ifstream::binary);
+    std::ifstream bsdl_file(getDriverName()+ "_" +  + ".bsdl", std::ifstream::binary);
 
     // If it does open, then start the launch of Ios
     if (bsdl_file.is_open())

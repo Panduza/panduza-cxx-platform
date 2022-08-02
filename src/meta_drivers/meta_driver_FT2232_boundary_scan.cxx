@@ -10,11 +10,21 @@ std::mutex MetaDriverFT2232BoundaryScan::mSetupMutex;
 void MetaDriverFT2232BoundaryScan::setup()
 {
     mProbeName = getInterfaceTree()["settings"]["probe_name"].asString();
+    
+    // Create a unique name for the driver name when there is multiple driver with the same name
+    mInterfaceTree = getInterfaceTree();
+    int serial_start_index = mInterfaceTree["settings"]["probe_name"].asString().find(" FT") + 1;
+    int probe_name_size = mInterfaceTree["settings"]["probe_name"].size();
+    std::string probe_serial_no = mProbeName.substr( serial_start_index, probe_name_size - serial_start_index);
+
     /// Create Meta Driver File
     std::shared_ptr<MetaDriver> meta_driver_file_instance = std::make_shared<MetaDriverFT2232BsdlLoader>(this);
 
+    // Create the unique driver name and put it back to the interface tree
+    mInterfaceTree["driver"] = mInterfaceTree["driver"].asString() + "_" + probe_serial_no;
+
     /// Initialize the meta_driver file instance
-    meta_driver_file_instance->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), getInterfaceTree());
+    meta_driver_file_instance->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), mInterfaceTree);
 
     /// Add the meta driver instance to the main meta driver list
     mMetaplatformInstance->addStaticDriverInstance(meta_driver_file_instance);
@@ -49,16 +59,15 @@ void MetaDriverFT2232BoundaryScan::startIo()
     createGroupInfoMetaDriver();
 
     // get some variable and key point
-    const Json::Value interface_json = getInterfaceTree();
-    const Json::Value repeated_json = interface_json["repeated"];
+    const Json::Value repeated_json = mInterfaceTree["repeated"];
     const std::string format = "%r";
-    const size_t posFormat = interface_json["name"].asString().find(format);
-
+    const size_t posFormat = mInterfaceTree["name"].asString().find(format);
+    
     // Loop into the repeated list of pins
     for (auto repeated_pin : repeated_json)
     {
         /// Create a json with the good pin name
-        Json::Value interface_json_copy = interface_json;
+        Json::Value interface_json_copy = mInterfaceTree;
         interface_json_copy["settings"]["pin"] = interface_json_copy["settings"]["pin"].asString().replace(0, format.length(), repeated_pin.asString());
         interface_json_copy["name"] = interface_json_copy["name"].asString().replace(posFormat, format.length(), repeated_pin.asString());
         LOG_F(2, "loading driver for pin : %s", interface_json_copy["name"].asString().c_str());
@@ -146,7 +155,7 @@ void MetaDriverFT2232BoundaryScan::createGroupInfoMetaDriver()
     std::shared_ptr<MetaDriver> meta_driver_group_info = std::make_shared<MetaDriverGroupInfo>(payload);
 
     /// Initialize the meta Driver
-    meta_driver_group_info->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), getInterfaceTree());
+    meta_driver_group_info->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), mInterfaceTree);
 
     /// add the meta driver to the main list
     mMetaplatformInstance->addReloadableDriverInstance(meta_driver_group_info);    

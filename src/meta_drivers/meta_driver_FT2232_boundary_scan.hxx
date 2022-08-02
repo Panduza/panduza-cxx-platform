@@ -67,6 +67,8 @@ private:
     // static std::list<std::shared_ptr<JtagFT2232>> JTAG_MANAGERS;
     std::shared_ptr<JtagFT2232> mJtagManager;
     bool mJtagManagerLoaded = false;
+
+    Json::Value mInterfaceTree;
 };
 
 class MetaDriverFactoryFT2232BoundaryScan : public MetaDriverFactory
