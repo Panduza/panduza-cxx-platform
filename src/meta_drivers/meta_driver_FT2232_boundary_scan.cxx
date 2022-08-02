@@ -10,7 +10,7 @@ std::mutex MetaDriverFT2232BoundaryScan::mSetupMutex;
 void MetaDriverFT2232BoundaryScan::setup()
 {
     /// Create Meta Driver File
-    std::shared_ptr<MetaDriver> meta_driver_file_instance = std::make_shared<MetaDriverFT2232File>(this);
+    std::shared_ptr<MetaDriver> meta_driver_file_instance = std::make_shared<MetaDriverFT2232BsdlLoader>(this);
 
     /// Initialize the meta_driver file instance
     meta_driver_file_instance->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), getInterfaceTree());

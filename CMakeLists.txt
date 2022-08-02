@@ -31,7 +31,7 @@ set(SOURCES
 	src/meta_drivers/meta_driver_io_fake.cxx
 	src/meta_drivers/meta_driver_psu_fake.cxx
 	src/meta_drivers/meta_driver_FT2232_boundary_scan.cxx
-	src/meta_drivers/meta_driver_FT2232_file.cxx
+	src/meta_drivers/meta_driver_FT2232_bsdl_loader.cxx
 	src/meta_drivers/meta_driver_FT2232_io.cxx
 	src/meta_drivers/ft2232_boundary_scan/jtag_core/jtag_core.cxx
 	src/meta_drivers/ft2232_boundary_scan/jtag_core/script.cxx

@@ -6,7 +6,7 @@
 #include "../meta_driver.hxx"
 #include "ft2232_boundary_scan/jtag_core/jtag_core.hxx"
 #include "ft2232_boundary_scan/jtag_manager.hxx"
-#include "meta_driver_FT2232_file.hxx"
+#include "meta_driver_FT2232_bsdl_loader.hxx"
 #include "meta_driver_FT2232_io.hxx"
 
 #include <thread>

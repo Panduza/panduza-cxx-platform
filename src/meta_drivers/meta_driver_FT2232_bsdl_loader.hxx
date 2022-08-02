@@ -1,5 +1,5 @@
-#ifndef _METADRIVERFT2232FILE_
-#define _METADRIVERFT2232FILE_
+#ifndef _METADRIVERFT2232BSDLLOADER_
+#define _METADRIVERFT2232BSDLLOADER_
 #pragma once
 
 #include <iostream>
@@ -9,14 +9,14 @@
 
 class MetaDriverFT2232BoundaryScan;
 
-class MetaDriverFT2232File : public MetaDriver
+class MetaDriverFT2232BsdlLoader : public MetaDriver
 {
 public:
     /// Constructor
-    MetaDriverFT2232File(MetaDriverFT2232BoundaryScan *meta_driver_ft2232_boundary_scan_instance);
+    MetaDriverFT2232BsdlLoader(MetaDriverFT2232BoundaryScan *meta_driver_ft2232_boundary_scan_instance);
 
     /// Create an alternative thread when needed
-    std::shared_ptr<std::thread> createAlternativeThread() { return std::make_shared<std::thread>(&MetaDriverFT2232File::test, this); }
+    std::shared_ptr<std::thread> createAlternativeThread() { return std::make_shared<std::thread>(&MetaDriverFT2232BsdlLoader::test, this); }
 
     /// Setup the meta driver
     void setup();

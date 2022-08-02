@@ -1,11 +1,11 @@
-#include "meta_driver_FT2232_file.hxx"
+#include "meta_driver_FT2232_bsdl_loader.hxx"
 #include "meta_driver_FT2232_boundary_scan.hxx"
 #include "../base64/base64.hxx"
 #include <fstream>
 
 class MetaDriverFT2232BoundaryScan;
 
-MetaDriverFT2232File::MetaDriverFT2232File(MetaDriverFT2232BoundaryScan* meta_driver_ft2232_boundary_scan_instance)
+MetaDriverFT2232BsdlLoader::MetaDriverFT2232BsdlLoader(MetaDriverFT2232BoundaryScan* meta_driver_ft2232_boundary_scan_instance)
 {
     // Save the parent instance
     mMetaDriverFT2232BoundaryScanInstance = meta_driver_ft2232_boundary_scan_instance;
@@ -16,7 +16,7 @@ MetaDriverFT2232File::MetaDriverFT2232File(MetaDriverFT2232BoundaryScan* meta_dr
 
 // ============================================================================
 //
-void MetaDriverFT2232File::setup()
+void MetaDriverFT2232BsdlLoader::setup()
 {
     // Subscribe to the different topic needed direction and value separated because of retained not coming in the good order
     subscribe(getBaseTopic() + "/File/cmds/#", 0);
@@ -40,7 +40,7 @@ void MetaDriverFT2232File::setup()
 
 // ============================================================================
 //
-void MetaDriverFT2232File::sendInfo()
+void MetaDriverFT2232BsdlLoader::sendInfo()
 {
     // Create the info payload
     Json::Value info;
@@ -55,7 +55,7 @@ void MetaDriverFT2232File::sendInfo()
 
 // ============================================================================
 //
-void MetaDriverFT2232File::message_arrived(mqtt::const_message_ptr msg)
+void MetaDriverFT2232BsdlLoader::message_arrived(mqtt::const_message_ptr msg)
 {
 
     loguru::set_thread_name("Sub callback");
@@ -120,12 +120,12 @@ void MetaDriverFT2232File::message_arrived(mqtt::const_message_ptr msg)
 
 // ============================================================================
 //
-void MetaDriverFT2232File::test()
+void MetaDriverFT2232BsdlLoader::test()
 {
-    loguru::set_thread_name("MetaDriverFT2232File");
+    loguru::set_thread_name("MetaDriverFT2232BsdlLoader");
     while(1)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        LOG_F(9,"MetaDriverFT2232File");
+        LOG_F(9,"MetaDriverFT2232BsdlLoader");
     }
 }
