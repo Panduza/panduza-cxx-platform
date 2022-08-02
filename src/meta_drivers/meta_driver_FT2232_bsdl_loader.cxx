@@ -48,7 +48,7 @@ void MetaDriverFT2232BsdlLoader::sendInfo()
     LOG_F(4, "Info sent is : %s", info.toStyledString().c_str());
 
     // publish the message info to the mqtt server for the pin
-    publish(getBaseTopic() + "/File/info", info, 0, false);
+    publish(getBaseTopic() + "/Bsdl_File/info", info, 0, false);
 }
 
 // ============================================================================
