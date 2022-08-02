@@ -9,6 +9,7 @@ std::mutex MetaDriverFT2232BoundaryScan::mSetupMutex;
 
 void MetaDriverFT2232BoundaryScan::setup()
 {
+    mProbeName = getInterfaceTree()["settings"]["probe_name"].asString();
     /// Create Meta Driver File
     std::shared_ptr<MetaDriver> meta_driver_file_instance = std::make_shared<MetaDriverFT2232BsdlLoader>(this);
 
@@ -43,6 +44,9 @@ void MetaDriverFT2232BoundaryScan::startIo()
         mJtagManager = createJtagManager(mProbeName, mBSDLName);
         mJtagManagerLoaded = true;
     }
+
+    // Create the Group Info meta Driver where it will store the payload of the jtagManager infos...
+    createGroupInfoMetaDriver();
 
     // get some variable and key point
     const Json::Value interface_json = getInterfaceTree();
@@ -118,6 +122,34 @@ void MetaDriverFT2232BoundaryScan::checkInput()
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         LOG_F(9, "MetaDriverFT2232BoundaryScanGroup");
     }
+}
+
+// ============================================================================
+//
+
+void MetaDriverFT2232BoundaryScan::createGroupInfoMetaDriver()
+{
+    int probe_id = mJtagManager->getProbeId();
+    std::string probe_name = mProbeName;
+    int nb_of_devices = jtagcore_get_number_of_devices(mJtagManager->getJc());
+
+    LOG_F(ERROR,"%d", probe_id);
+    LOG_F(ERROR,"%s", probe_name.c_str());
+    LOG_F(ERROR,"%d", nb_of_devices);
+
+    Json::Value payload;
+
+    payload["probe_id"] = probe_id;
+    payload["probe_name"] = probe_name;
+    payload["nb_of_devices"] = nb_of_devices;
+
+    std::shared_ptr<MetaDriver> meta_driver_group_info = std::make_shared<MetaDriverGroupInfo>(payload);
+
+    /// Initialize the meta Driver
+    meta_driver_group_info->initialize(getMachineName(), getBrokerName(), getBrokerAddr(), getBrokerPort(), getInterfaceTree());
+
+    /// add the meta driver to the main list
+    mMetaplatformInstance->addReloadableDriverInstance(meta_driver_group_info);    
 }
 
 // ============================================================================
