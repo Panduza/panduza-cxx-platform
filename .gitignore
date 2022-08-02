@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+build
+buildmain
+buildDemo
+.vscode
+*.log
+html/
+src/mainpage.h
+src/a.out
+src/test.cpp
+src/meta_driver
+src/old
+src/Scan_service.bsdl

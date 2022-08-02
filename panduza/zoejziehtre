@@ -1,0 +1,72 @@
+{
+    "machine": "rpi4_test",
+    "brokers": {
+
+        "boundaryscanner": {
+            "addr": "localhost",
+            "port": 1883,
+            "interfaces": [
+                {
+                    "name": "IO_%r",
+                    "driver": "Scan_serviceS7",
+                    "settings": {
+                        "BSDL" : "/etc/BoundaryScan/xc7s50_csga324.bsd",
+                        "probe_name" : "FT2232HL A FT6RR4EEA",
+                        "mode" : "manual",
+                        "pin"  : "%r"
+                    },
+                    "repeated": [
+                        "E18",
+                        "F13",
+                        "E13",
+                        "H15",
+                        "J15",
+                        "G17",
+                        "F15",
+                        "E15",
+                        "F18",
+                        "E14",
+                        "G15",
+                        "K16",
+                        "J16",
+                        "H13",
+                        "H14",
+                        "H18",
+                        "G18",
+                        "M5"
+                    ]
+                },
+                {
+                    "name": "IO_%r",
+                    "driver": "Scan_serviceA7",
+                    "settings": {
+                        "BSDL" : "/etc/BoundaryScan/XA7A100T_CSG324.bsdl",
+                        "probe_name" : "FT2232HL A FT72DWQ6A",
+                        "mode" : "manual",
+                        "pin"  : "%r"
+                    },
+                    "repeated": [
+                        "H5",
+                        "J5",
+                        "T9",
+                        "T10",
+                        "G6"
+                    ]
+                }
+            ]
+        },
+        "boundaryscanner1": {
+            "addr": "localhost",
+            "port": 1883,
+            "interfaces": [
+                {
+                    "name": "IO",
+                    "driver": "io_fake",
+                    "settings": {
+                        "behaviour" : "manual"
+                    }
+                }
+            ]
+        }
+    }
+}
