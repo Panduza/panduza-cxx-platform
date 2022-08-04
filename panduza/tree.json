@@ -3,133 +3,37 @@
     "brokers": {
 
         "boundaryscanner": {
-            "addr": "tcp://localhost",
+            "addr": "localhost",
             "port": 1883,
-            "mqtt" : {
-                "clientID" : "BoundaryScanner",
-                "timeout" : "10",
-                "QoS" : "1",
-                "setRetained" : "false",
-                "retry" : "5"
-            },
             "interfaces": [
                 {
                     "name": "IO_%r",
-                    "driver": "io_fake",
+                    "driver": "Scan_service",
                     "settings": {
-                        "BSDL" : "/etc/BoundaryScan/xc7s50_csga324.bsd",
-                        "mode" : "manual"
+                        "probe_name" : "FT2232HL A FT6RR4EEA",
+                        "mode" : "manual",
+                        "pin"  : "%r"
                     },
                     "repeated": [
-                        "F18",
-                        "H14",
-                        "H18",
-                        "F15",
-                        "E13",
                         "E18",
                         "F13",
+                        "E13",
+                        "H15",
                         "J15",
-                        "E14",
-                        "E15",
                         "G17",
-                        "K16"
-                    ],
-                    "gpio": {
-                        "id": "%r"
-                    }
-                }
-            ]
-        },
-
-        "my_broker": {
-            "addr": "tcp://localhost",
-            "port": 1883,
-            "mqtt" : {
-                "clientID" : "psu_fake",
-                "timeout" : "10",
-                "QoS" : "1",
-                "setRetained" : "false",
-                "retry" : "5"
-            },
-            "BSDL" : "/etc/BoundaryScan/xc7s50_csga324.bsd",
-            "interfaces": [
-                {
-                    "repeated": [
-                        2,
-                        3,
-                        4,
-                        14,
-                        15,
-                        17,
-                        27
-                    ],
-                    "name": "BoundaryScan",
-                    "driver": "psu_fake",
-                    "gpio": {
-                        "id": "%r"
-                    },
-                    "comment": {
-                        "GPIO2": "Header Pin 3 (SDA)(Pin 1 is the closest from the SD card, continue the ETH on the same column to get the ood pin values)",
-                        "GPIO3": "Header Pin 5 (SCL)",
-                        "GPIO4": "Header Pin 7 (GPCLK0)",
-                        "GPIO14": "Header Pin 8 (TXD)",
-                        "GPIO15": "Header Pin 10 (RXD)",
-                        "GPIO17": "",
-                        "GPIO27": ""
-                    }
-                }
-            ]
-        },
-
-        "test_broker1": {
-            "addr": "tcp://localhost",
-            "port": 1883,
-            "mqtt" : {
-                "clientID" : "BoundaryScanner",
-                "timeout" : "10",
-                "QoS" : "1",
-                "setRetained" : "false",
-                "retry" : "5"
-            },
-            "BSDL" : "/etc/BoundaryScan/xc7s50_csga324.bsd",
-            "interfaces": [
-                {
-                    "name": "BoundaryScan",
-                    "driver": "test_broker1",
-                    "gpio": {
-                        "id": "%r"
-                    }
-                }
-            ]
-        },
-
-        "test_broker2": {
-            "addr": "tcp://localhost",
-            "port": 1883,
-            "mqtt" : {
-                "clientID" : "BoundaryScanner",
-                "timeout" : "10",
-                "QoS" : "1",
-                "setRetained" : "false",
-                "retry" : "5"
-            },
-            "BSDL" : "/etc/BoundaryScan/xc7s50_csga324.bsd",
-            "interfaces": [
-                {
-                    "name": "BoundaryScan",
-                    "driver": "test_broker2",
-                    "gpio": {
-                        "id": "%r"
-                    },
-                    "comment": {
-                        "GPIO2": "Header Pin 3 (SDA)(Pin 1 is the closest from the SD card, continue the ETH on the same column to get the ood pin values)",
-                        "GPIO3": "Header Pin 5 (SCL)",
-                        "GPIO4": "Header Pin 7 (GPCLK0)",
-                        "GPIO14": "Header Pin 8 (TXD)",
-                        "GPIO15": "Header Pin 10 (RXD)",
-                        "GPIO17": "",
-                        "GPIO27": ""
-                    }
+                        "F15",
+                        "E15",
+                        "F18",
+                        "E14",
+                        "G15",
+                        "K16",
+                        "J16",
+                        "H13",
+                        "H14",
+                        "H18",
+                        "G18",
+                        "M5"
+                    ]
                 }
             ]
         }
