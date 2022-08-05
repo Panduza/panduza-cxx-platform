@@ -2,6 +2,3 @@
 
 docker build -t boundaryscan .
 docker run --privileged --network=host -i -t boundaryscan /bin/bash
-
-cd /usr/local/lib
-sudo ldconfig
