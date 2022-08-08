@@ -4,7 +4,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-all-dev
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget libboost-dev pkg-config libboost-program-options-dev libjsoncpp-dev
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -31,8 +31,6 @@ WORKDIR /setup/paho.mqtt.cpp
 RUN cmake -Bbuild -H. -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=TRUE
 RUN cmake --build build/ --target install
 RUN ldconfig
-
-RUN apt-get install -y libjsoncpp-dev
 
 WORKDIR /
 
