@@ -4,7 +4,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget libboost-dev pkg-config libboost-program-options-dev libjsoncpp-dev
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
