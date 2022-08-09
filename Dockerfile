@@ -4,7 +4,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -37,6 +37,8 @@ WORKDIR /
 COPY /$0 /panduza-cxx-platform/
 COPY /$0/panduza /etc/panduza/
 COPY compile.sh compile.sh
+COPY /$0/src/plugins/libBoundaryScan.so /usr/share/panduza-cxx/libBoundaryScan.so
+# COPY /$0/src/plugins/libHello.so /usr/local/lib/libHello.so
 RUN chmod +x compile.sh
 RUN apt-get install -y kmod
 
