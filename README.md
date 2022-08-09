@@ -6,7 +6,7 @@ Panduza C++ Meta Drivers Manager
 This is the list of dependencies to install and steps to do it.
 1. Install Docker 
     
-5. Install mosquitto and add the configuration (for ubuntu)
+2. Install mosquitto and add the configuration (for ubuntu)
    ```sh
     sudo apt update
     sudo apt install -y mosquitto
@@ -17,7 +17,9 @@ This is the list of dependencies to install and steps to do it.
     sudo systemctl restart mosquitto
    ```
 
-6. Start the program (privilege needed):
+3. Copy the plugin created into src/plugins
+
+4. Start the program (privilege needed):
    ```sh
     ./start.sh
    ```
