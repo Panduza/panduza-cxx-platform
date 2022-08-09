@@ -3,10 +3,19 @@
 #include <list>
 #include <string>
 #include <thread>
+#include <functional>
 #include "mqtt/async_client.h"
 #include "loguru/loguru.hxx"
+#include "plugins/entrypoint.hxx"
+
+// #include "plugins/my_plugin_base.hpp"
+#include <boost/dll/import.hpp>
+#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "meta_platform.hxx"
+
+using BSFMap = std::map<std::string,MetaDriverFactory *>;
 
 Metaplatform::Metaplatform(int argc, char *argv[])
 {
@@ -36,13 +45,28 @@ int Metaplatform::run()
 {
     // create seed for the random in the program
     srand(time(0));
-
     // Append factories
     // \todo Change this
     // mFactories["io_fake"] = new MetaDriverFactoryIoFake();
-    mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
+    // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
     // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
+    
+    // Create base path to load the plugin
+    boost::filesystem::path lib_path("/usr/share/panduza-cxx");
 
+    // create pointer on function
+    typedef boost::shared_ptr<entrypoint> (entrypoint_create_t)();
+    boost::function<entrypoint_create_t> creator;
+    creator = boost::dll::import_alias<entrypoint_create_t>(
+        lib_path / "libBoundaryScan.so",
+        "get_factory",
+        boost::dll::load_mode::append_decorations
+    );
+
+    // call the plugin and get the factory
+    boost::shared_ptr<entrypoint> plugin_instance = creator();
+    BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
+    mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
