@@ -7,9 +7,6 @@
 #include <jsoncpp/json/json.h>
 #include <mqtt/async_client.h>
 #include "meta_driver.hxx"
-#include "meta_drivers/meta_driver_io_fake.hxx"
-#include "meta_drivers/meta_driver_psu_fake.hxx"
-#include "meta_drivers/meta_driver_FT2232_boundary_scan.hxx"
 
 class Metaplatform
 {

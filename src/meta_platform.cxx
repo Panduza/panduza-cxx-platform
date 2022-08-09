@@ -8,7 +8,6 @@
 #include "loguru/loguru.hxx"
 #include "plugins/entrypoint.hxx"
 
-// #include "plugins/my_plugin_base.hpp"
 #include <boost/dll/import.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
