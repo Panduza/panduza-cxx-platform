@@ -51,6 +51,9 @@ set(EXTRA_LIBS
 	ftd2xx 
 	pthread
 	boost_program_options
+	boost_filesystem
+	boost_system
+	dl
 )
 
 # include mqtt libraries
