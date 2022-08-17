@@ -1,10 +1,16 @@
 FROM ubuntu:20.04
 
 ENV TZ=Europe/Paris
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
 RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
+RUN apt-get install -y python3
+RUN apt-get install -y sudo
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -16,30 +22,9 @@ WORKDIR /usr/local/lib
 RUN ln -s libftd2xx.so.1.4.24 libftd2xx.so
 RUN chmod 0755 libftd2xx.so.1.4.24
 
-WORKDIR /
-RUN mkdir setup
-WORKDIR /setup
-RUN git clone https://github.com/eclipse/paho.mqtt.c.git
-WORKDIR /setup/paho.mqtt.c
-RUN git checkout v1.3.8
-RUN cmake -Bbuild -H. -DPAHO_WITH_SSL=ON
-RUN cmake --build build/ --target install
-RUN ldconfig
-WORKDIR /setup
-RUN git clone https://github.com/eclipse/paho.mqtt.cpp
-WORKDIR /setup/paho.mqtt.cpp
-RUN cmake -Bbuild -H. -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=TRUE
-RUN cmake --build build/ --target install
 RUN ldconfig
 
-WORKDIR /
-
-COPY /$0 /panduza-cxx-platform/
-COPY /$0/panduza /etc/panduza/
-COPY compile.sh compile.sh
-COPY /$0/src/plugins/libBoundaryScan.so /usr/share/panduza-cxx/libBoundaryScan.so
-# COPY /$0/src/plugins/libHello.so /usr/local/lib/libHello.so
-RUN chmod +x compile.sh
-RUN apt-get install -y kmod
-
-ENTRYPOINT ["/compile.sh"]
+RUN useradd -m builder
+RUN echo "builder:builder" | chpasswd
+RUN adduser builder sudo
+USER builder
