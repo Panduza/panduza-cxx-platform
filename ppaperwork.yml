@@ -1,0 +1,13 @@
+doxygen:
+  ignore_path:
+  - setup.py
+  - .github/*
+  - .git/*
+  - .gitignore
+  - documentation/*
+  - '*/features/*'
+  - cmake/*
+  - library/*
+  - .vscode/*
+  - BoundaryScan/*
+  - src/plugins/*.so

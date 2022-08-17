@@ -1,7 +1,7 @@
 # panduza-cxx-platform
 Panduza C++ Meta Drivers Manager 
 
-### Installation steps
+## Installation steps
 
 This is the list of dependencies to install and steps to do it.
 1. Install Docker 
