@@ -9,8 +9,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE Debug)
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 set(SOURCES 
 	src/loguru/loguru.cxx
 	src/main.cxx
