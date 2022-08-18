@@ -17,6 +17,12 @@ set(SOURCES
 	src/meta_drivers/meta_driver_io_fake.cxx
 	src/meta_drivers/meta_driver_psu_fake.cxx
 	)
+
+set(SOURCES-METAPLAFORM-LIBRARY
+	src/meta_platform.cxx
+	src/meta_driver.cxx
+	)
+
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 
@@ -64,6 +70,8 @@ pkg_check_modules(JSONCPP jsoncpp)
 
 # add the executable
 add_executable(Scan ${SOURCES})
+add_library(Metaplatform SHARED ${SOURCES-METAPLAFORM-LIBRARY})
+target_link_libraries(Metaplatform PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
 
 # link libraries with the executable
 target_link_libraries(Scan PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})

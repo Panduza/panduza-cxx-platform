@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # set the project name and version
-project(Scan LANGUAGES CXX)
+project(Metaplatform LANGUAGES CXX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -I/usr/include/jsoncpp")
 
 # specify the C++ standard
@@ -29,8 +29,8 @@ set(EXTRA_LIBS
 
 # include mqtt libraries
 set(MQTT_LIBRARIES
-	paho-mqttpp3 
-	paho-mqtt3as 
+	paho-mqttpp3
+	paho-mqtt3a # Put back mqtt3as when possible if it is needed
 	paho-mqtt3c 
 )
 
@@ -43,6 +43,7 @@ add_library(Metaplatform SHARED ${SOURCES})
 
 # link libraries with the executable
 target_link_libraries(Metaplatform PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
-
 # add the binary tree to the search path for include files
 target_include_directories(Metaplatform PUBLIC "${PROJECT_BINARY_DIR}")
+target_include_directories(Metaplatform PUBLIC ../build/_deps/paho.mqtt.cpp-src/src)
+target_include_directories(Metaplatform PUBLIC ../build/_deps/paho.mqtt.c-src/src)
