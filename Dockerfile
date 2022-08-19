@@ -2,8 +2,8 @@ FROM ubuntu:20.04
 
 ENV TZ=Europe/Paris
 
-
-RUN apt-get install -y locale-gen
+RUN apt-get update
+RUN apt-get install -y locales
 
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
          echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
@@ -12,7 +12,6 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
          
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update
 RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
 RUN apt-get install -y python3
 RUN apt-get install -y sudo
@@ -37,6 +36,8 @@ WORKDIR /
 RUN useradd -m builder
 RUN echo "builder:builder" | chpasswd
 RUN adduser builder sudo
+RUN groupadd usb
+RUN usermod -a -G usb builder
 USER builder
 
 WORKDIR /home/builder

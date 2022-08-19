@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sudo groupadd usb
-sudo usermod -a -G usb root
+# sudo groupadd usb
+# sudo usermod -a -G usb builder
 
 cd /panduza-cxx-platform
 mkdir -p build
@@ -32,4 +32,4 @@ sudo cp panduza/tree.json /etc/panduza/
 
 cd /panduza-cxx-platform/build
 
-./Scan
+./Scan -v 9
