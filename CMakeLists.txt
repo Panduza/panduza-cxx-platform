@@ -55,6 +55,7 @@ set(EXTRA_LIBS
 	boost_program_options
 	boost_filesystem
 	boost_system
+	# base64     #to uncomment if the library does load
 )
 
 # include mqtt libraries
