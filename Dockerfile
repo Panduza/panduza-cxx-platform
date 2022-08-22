@@ -36,8 +36,11 @@ WORKDIR /
 RUN useradd -m builder
 RUN echo "builder:builder" | chpasswd
 RUN adduser builder sudo
+
 RUN groupadd usb
 RUN usermod -a -G usb builder
+
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER builder
 
 WORKDIR /home/builder
