@@ -51,7 +51,9 @@ int Metaplatform::run()
     // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
-    boost::filesystem::path lib_path("/usr/share/panduza-cxx");
+    boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
+    // boost::filesystem::path lib_path("/home/valentin/workspace/22-9915-ed-4000_ft2232_mqtt_service/src/plugins");
+    // boost::filesystem::path lib_path("/workspaces/22-9915-ed-4000_ft2232_mqtt_service/src/plugins");
 
     // create pointer on function
     typedef boost::shared_ptr<entrypoint> (entrypoint_create_t)();
