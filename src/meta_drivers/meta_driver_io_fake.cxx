@@ -89,7 +89,7 @@ void MetaDriverIoFake::message_arrived(mqtt::const_message_ptr msg)
 
 std::shared_ptr<std::thread> MetaDriverIoFake::createAlternativeThread(){}
 
-std::shared_ptr<MetaDriver> MetaDriverFactoryIoFake::createDriver()
+std::shared_ptr<MetaDriver> MetaDriverFactoryIoFake::createDriver(void *arg)
 {
     std::shared_ptr<MetaDriver> MetaDriverFactoryIoFakeInstance = std::make_shared<MetaDriverIoFake>();
 

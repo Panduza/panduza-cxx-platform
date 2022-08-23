@@ -6,35 +6,35 @@
 
 class MetaDriverIoFake : public MetaDriver
 {
-    public:
-        ~MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Destructor"); }
+public:
+    ~MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Destructor"); }
 
-        MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
+    MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
 
-        void setup();
+    void setup();
 
-        void sendInfo();
+    void sendInfo();
 
-        void autoToggle();
+    void autoToggle();
 
-        void message_arrived(mqtt::const_message_ptr msg) override;
+    void message_arrived(mqtt::const_message_ptr msg) override;
 
-        void setDirection(std::string direction) { mDirection = direction; };
-        void setValue(int value) { mValue = value; };
+    void setDirection(std::string direction) { mDirection = direction; };
+    void setValue(int value) { mValue = value; };
 
-        std::shared_ptr<std::thread> createAlternativeThread();
+    std::shared_ptr<std::thread> createAlternativeThread();
 
-    private:
-        std::string mDirection = "in";
-        int mValue = 1;
-    };
+private:
+    std::string mDirection = "in";
+    int mValue = 1;
+};
 
-    class MetaDriverFactoryIoFake : public MetaDriverFactory
-    {
-    public:
-        MetaDriverFactoryIoFake(){};
+class MetaDriverFactoryIoFake : public MetaDriverFactory
+{
+public:
+    MetaDriverFactoryIoFake(){};
 
-        std::shared_ptr<MetaDriver> createDriver();
+    std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 
 #endif

@@ -22,7 +22,7 @@ class MetaDriverFactoryPsuFake : public MetaDriverFactory {
     public:
         MetaDriverFactoryPsuFake();
 
-        std::shared_ptr<MetaDriver> createDriver();
+        std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 
 #endif
