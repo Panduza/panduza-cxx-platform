@@ -15,6 +15,7 @@ sudo mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
 sudo cp -R _deps/paho.mqtt.c-src /usr/share/panduza-cxx/includes
 sudo cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
 
+sudo ldconfig
 cd ~/panduza-cxx-class-boundary-scan
 mkdir -p build && cd build
 cmake ..
@@ -31,5 +32,4 @@ sudo cp panduza/tree.json /etc/panduza/
 # sudo cp BoundaryScan/* /etc/BoundaryScan/
 
 cd /panduza-cxx-platform/build
-sudo ldconfig
 ./Scan -v 9
