@@ -79,3 +79,11 @@ target_link_libraries(Scan PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBR
 
 # add the binary tree to the search path for include files
 target_include_directories(Scan PUBLIC "${PROJECT_BINARY_DIR}")
+
+install(TARGETS paho-mqtt3a paho-mqtt3c paho-mqttpp3
+		LIBRARY DESTINATION /usr/local/lib
+)
+
+install (TARGETS Metaplatform
+		LIBRARY DESTINATION /usr/share/panduza-cxx/libraries
+)

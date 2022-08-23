@@ -7,25 +7,20 @@ cd /panduza-cxx-platform
 mkdir -p build
 cd build
 cmake ..
-make
+sudo make install
 
-sudo mkdir /usr/share/panduza-cxx
-sudo mkdir /usr/share/panduza-cxx/libraries
 sudo mkdir /usr/share/panduza-cxx/includes
 sudo mkdir /usr/share/panduza-cxx/includes/paho.mqtt.c-src
 sudo mkdir /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
 
-sudo cp --preserve=links _deps/paho.mqtt.c-build/src/*.so* /usr/local/lib/
-sudo cp --preserve=links _deps/paho.mqtt.cpp-build/src/*.so* /usr/local/lib/
-sudo cp libMetaplatform.so /usr/share/panduza-cxx/libraries/
 sudo cp -R _deps/paho.mqtt.c-src /usr/share/panduza-cxx/includes
 sudo cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
 
 cd ~/panduza-cxx-class-boundary-scan
 mkdir build && cd build
 cmake ..
-make
-sudo cp libBoundaryScan.so /usr/share/panduza-cxx/libraries/
+sudo make install
+# sudo cp libBoundaryScan.so /usr/share/panduza-cxx/libraries/
 
 rmmod ftdi_sio
 rmmod usbserial
