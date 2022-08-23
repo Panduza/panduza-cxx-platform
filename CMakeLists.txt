@@ -85,5 +85,5 @@ install(TARGETS paho-mqtt3a paho-mqtt3c paho-mqttpp3
 )
 
 install (TARGETS Metaplatform
-		LIBRARY DESTINATION /usr/share/panduza-cxx/libraries
+		LIBRARY DESTINATION /usr/local/lib
 )
