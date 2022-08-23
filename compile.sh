@@ -32,4 +32,5 @@ sudo cp panduza/tree.json /etc/panduza/
 # sudo cp BoundaryScan/* /etc/BoundaryScan/
 
 cd /panduza-cxx-platform/build
+
 ./Scan -v 9
