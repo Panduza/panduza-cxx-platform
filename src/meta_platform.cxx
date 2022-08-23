@@ -13,6 +13,9 @@
 #include <boost/shared_ptr.hpp>
 
 #include "meta_platform.hxx"
+#include "meta_drivers/meta_driver_io_fake.hxx"
+#include "meta_drivers/meta_driver_psu_fake.hxx"
+#include "meta_drivers/meta_driver_file_fake.hxx"
 
 using BSFMap = std::map<std::string,MetaDriverFactory *>;
 
@@ -46,14 +49,14 @@ int Metaplatform::run()
     srand(time(0));
     // Append factories
     // \todo Change this
-    // mFactories["io_fake"] = new MetaDriverFactoryIoFake();
+    mFactories["io_fake"] = new MetaDriverFactoryIoFake();
+    mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
+    mFactories["file_fake"] = new MetaDriverFactoryFileFake();
     // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
     // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
     boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
-    // boost::filesystem::path lib_path("/home/valentin/workspace/22-9915-ed-4000_ft2232_mqtt_service/src/plugins");
-    // boost::filesystem::path lib_path("/workspaces/22-9915-ed-4000_ft2232_mqtt_service/src/plugins");
 
     // create pointer on function
     typedef boost::shared_ptr<entrypoint> (entrypoint_create_t)();
@@ -208,6 +211,7 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
     // Initializing the meta driver instance
     LOG_F(5, "Driver %s created, initializing variables...", driver_name.c_str());
+    LOG_F(ERROR, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
     driver_instance->initialize(mMachineName, broker_name, broker_addr, broker_port, interface_json);
 
     LOG_F(5, "Driver %s initialized.", driver_name.c_str());
