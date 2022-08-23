@@ -11,11 +11,13 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(SOURCES 
 	src/loguru/loguru.cxx
+	src/base64/base64.cxx
 	src/main.cxx
 	src/meta_platform.cxx
 	src/meta_driver.cxx
 	src/meta_drivers/meta_driver_io_fake.cxx
 	src/meta_drivers/meta_driver_psu_fake.cxx
+	src/meta_drivers/meta_driver_file_fake.cxx
 	)
 
 set(SOURCES-METAPLAFORM-LIBRARY
@@ -71,7 +73,8 @@ pkg_check_modules(JSONCPP jsoncpp)
 
 # add the executable
 add_executable(Scan ${SOURCES})
-add_library(Metaplatform SHARED ${SOURCES-METAPLAFORM-LIBRARY})
+add_library(Metaplatform SHARED ${SOURCES})
+# add_library(Metaplatform SHARED ${SOURCES-METAPLAFORM-LIBRARY})
 target_link_libraries(Metaplatform PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
 
 # link libraries with the executable
