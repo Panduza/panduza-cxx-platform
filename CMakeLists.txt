@@ -41,13 +41,13 @@ FetchContent_MakeAvailable(paho.mqtt.c)
 
 #initialize the PAHO C++ variables
 set(PAHO_MQTT_C_INCLUDE_DIRS ${paho.mqtt.c_SOURCE_DIR}/src)
-set(PAHO_MQTT_C_LIBRARIES ${paho.mqtt.c_BINARY_DIR}/src/libpaho-mqtt3a.so)
+set(PAHO_MQTT_C_LIBRARIES ${paho.mqtt.c_BINARY_DIR}/src/libpaho-mqtt3as.so)
 
 # fetch PAHO C++
 FetchContent_MakeAvailable(paho.mqtt.cpp)
 
 # make paho c++ dependent from paho c
-add_dependencies(paho-cpp-objs paho-mqtt3a)
+add_dependencies(paho-cpp-objs paho-mqtt3as)
 
 # set extra libraries needed
 set(EXTRA_LIBS 
@@ -62,7 +62,7 @@ set(EXTRA_LIBS
 
 # include mqtt libraries
 set(MQTT_LIBRARIES
-	paho-mqtt3a # Should be as but somehow it don't work anymore
+	paho-mqtt3as
 	paho-mqtt3c 
 	paho-mqttpp3
 )
@@ -83,7 +83,7 @@ target_link_libraries(Scan PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBR
 # add the binary tree to the search path for include files
 target_include_directories(Scan PUBLIC "${PROJECT_BINARY_DIR}")
 
-install(TARGETS paho-mqtt3a paho-mqtt3c paho-mqttpp3
+install(TARGETS paho-mqtt3as paho-mqtt3c paho-mqttpp3
 		LIBRARY DESTINATION /usr/local/lib
 )
 

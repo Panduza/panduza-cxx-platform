@@ -11,7 +11,8 @@
                     "settings": {
                         "probe_name" : "FT2232HL A FT6RR4EEA",
                         "mode" : "manual",
-                        "pin"  : "%r"
+                        "pin"  : "%r",
+                        "behaviour" : "static"
                     },
                     "repeated": [
                         "E18",
@@ -66,7 +67,7 @@
                     "name": "IO",
                     "driver": "io_fake",
                     "settings": {
-                        "behaviour" : "manual"
+                        "behaviour" : "static"
                     }
                 },
                 {
