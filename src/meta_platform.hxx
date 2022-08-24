@@ -8,6 +8,7 @@
 #include <mqtt/async_client.h>
 #include "meta_driver.hxx"
 
+/// Metaplatform class that will handle the platform and its plugins
 class Metaplatform
 {
 public:

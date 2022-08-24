@@ -4,6 +4,7 @@
 
 #include "../meta_driver.hxx"
 
+/// Fake io meta driver for testing
 class MetaDriverIoFake : public MetaDriver
 {
 public:
@@ -29,6 +30,7 @@ private:
     int mValue = 1;
 };
 
+/// Fake io meta driver factory for testing
 class MetaDriverFactoryIoFake : public MetaDriverFactory
 {
 public:

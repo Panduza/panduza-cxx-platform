@@ -4,6 +4,7 @@
 
 #include "../meta_driver.hxx"
 
+/// Fake psu meta driver for testing
 class MetaDriverPsuFake : public MetaDriver {
     public:
         MetaDriverPsuFake()
@@ -18,6 +19,7 @@ class MetaDriverPsuFake : public MetaDriver {
         // void run();
 };
 
+/// Fake psu meta driver factory for testing
 class MetaDriverFactoryPsuFake : public MetaDriverFactory {
     public:
         MetaDriverFactoryPsuFake();

@@ -7,6 +7,7 @@
 #include <sstream>
 #include "../meta_driver.hxx"
 
+/// Fake file meta driver for testing
 class MetaDriverFileFake : public MetaDriver
 {
 public:
@@ -33,6 +34,7 @@ private:
     std::string mBSDLName;
 };
 
+/// Fake file meta driver factory for testing
 class MetaDriverFactoryFileFake : public MetaDriverFactory
 {
 public:
