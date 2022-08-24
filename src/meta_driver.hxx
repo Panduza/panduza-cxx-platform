@@ -12,8 +12,6 @@
 class MetaDriver : public virtual mqtt::callback, public virtual mqtt::iaction_listener
 {
 public:
-    /// Flag if the driver need another thread
-    bool mNeedThread = false;
     /// Retry count on reconnect, resetted when successful
     int mRetryCnt = 0;
 

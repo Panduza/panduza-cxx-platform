@@ -3,11 +3,7 @@
 #include <fstream>
 
 
-MetaDriverFileFake::MetaDriverFileFake()
-{
-    // Pass the thread flag to True
-    mNeedThread = true;
-}
+MetaDriverFileFake::MetaDriverFileFake(){}
 
 // ============================================================================
 //
