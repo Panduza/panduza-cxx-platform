@@ -8,7 +8,7 @@
 class MetaDriverIoFake : public MetaDriver
 {
 public:
-    ~MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Destructor"); }
+    ~MetaDriverIoFake() ;
 
     MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
 
@@ -26,6 +26,9 @@ public:
     std::shared_ptr<std::thread> createAlternativeThread();
 
 private:
+    bool mKillThread = false;
+    std::thread *mAlternativeThread;
+
     std::string mDirection = "in";
     int mValue = 1;
 };
