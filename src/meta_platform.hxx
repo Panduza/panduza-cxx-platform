@@ -36,21 +36,17 @@ public:
     /// loop into interfaces of the broker to find drivers
     void generateInterfacesFromBrokerData(std::string broker_name, Json::Value broker_json);
 
-    void generateInterfaceFromData(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port);
-
     /// Check if driver of the interface is available and load if the case
     void searchMetaDriverFromInterface(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port);
     /// Load the driver
     void loadMetaDriver(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port);
 
     /// Gettter for the list of interfaces
-    const std::list<std::shared_ptr<MetaDriver>> &getStaticInterfaces() const
-    {
-        return mDriverInstancesStatic;
-    }
+    const std::list<std::shared_ptr<MetaDriver>> &getStaticInterfaces() const { return mDriverInstancesStatic; }
 
-    /// Add Meta Driver into the good list
+    /// Add Meta Driver into static list
     void addStaticDriverInstance(std::shared_ptr<MetaDriver> driver_instance) { mDriverInstancesStatic.emplace_back(driver_instance); }
+    /// Add Meta Driver into reloadable list
     void addReloadableDriverInstance(std::shared_ptr<MetaDriver> driver_instance) { mDriverInstancesReloadableToLoad.emplace_back(driver_instance); }
 
     /// Clear reloadable meta driver list

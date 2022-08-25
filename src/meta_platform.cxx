@@ -157,18 +157,9 @@ void Metaplatform::generateInterfacesFromBrokerData(std::string broker_name, Jso
         const auto interface_name = interface["name"].asString().c_str();
         LOG_F(3, "Search for drivers in interface : %s", interface["name"].asString().c_str());
 
-        // load attached Interface
-        generateInterfaceFromData(interface, broker_name, broker_addr, broker_port);
+        // load attached Interface and search driver in the interface
+        searchMetaDriverFromInterface(interface, broker_name, broker_addr, broker_port);
     }
-}
-
-// ============================================================================
-//
-void Metaplatform::generateInterfaceFromData(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port)
-{
-    // search a driver in the interface
-    LOG_F(3, "Search for drivers in interface : %s", interface_json["name"].asString().c_str());
-    searchMetaDriverFromInterface(interface_json, broker_name, broker_addr, broker_port);
 }
 
 // ============================================================================
