@@ -24,6 +24,7 @@ class MetaDriverFactoryPsuFake : public MetaDriverFactory {
     public:
         MetaDriverFactoryPsuFake();
 
+        /// Create driver for psu fake
         std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 

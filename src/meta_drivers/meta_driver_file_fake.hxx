@@ -40,6 +40,7 @@ class MetaDriverFactoryFileFake : public MetaDriverFactory
 public:
     MetaDriverFactoryFileFake(){};
 
+    /// Create driver for file fake
     std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 

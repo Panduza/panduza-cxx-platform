@@ -39,6 +39,7 @@ class MetaDriverFactoryIoFake : public MetaDriverFactory
 public:
     MetaDriverFactoryIoFake(){};
 
+    /// Create driver for io fake
     std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 
