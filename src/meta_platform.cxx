@@ -59,7 +59,7 @@ int Metaplatform::run()
     boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
 
     // create pointer on function
-    typedef boost::shared_ptr<entrypoint> (entrypoint_create_t)();
+    typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
     boost::function<entrypoint_create_t> creator;
     creator = boost::dll::import_alias<entrypoint_create_t>(
         lib_path / "libBoundaryScan.so",
@@ -68,7 +68,7 @@ int Metaplatform::run()
     );
 
     // call the plugin and get the factory
-    boost::shared_ptr<entrypoint> plugin_instance = creator();
+    boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
     BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
     mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
     // start the whole process of creating instances from the tree
