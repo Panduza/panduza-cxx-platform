@@ -31,7 +31,7 @@ void MetaDriverPsuFake::sendInfo()
 
 MetaDriverFactoryPsuFake::MetaDriverFactoryPsuFake(){}
 
-std::shared_ptr<MetaDriver> MetaDriverFactoryPsuFake::createDriver()
+std::shared_ptr<MetaDriver> MetaDriverFactoryPsuFake::createDriver(void* arg)
 {
     std::shared_ptr<MetaDriver> MetaDriverFactoryPsuFakeInstance = std::make_shared<MetaDriverPsuFake>();
     

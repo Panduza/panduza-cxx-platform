@@ -1,10 +1,21 @@
 FROM ubuntu:20.04
 
 ENV TZ=Europe/Paris
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev
+RUN apt-get install -y locales
+
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
+         echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+         echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+         locale-gen en_US.UTF-8
+         
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
+RUN apt-get install -y python3
+RUN apt-get install -y sudo
+RUN apt-get install -y kmod
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -16,28 +27,26 @@ WORKDIR /usr/local/lib
 RUN ln -s libftd2xx.so.1.4.24 libftd2xx.so
 RUN chmod 0755 libftd2xx.so.1.4.24
 
-WORKDIR /
-RUN mkdir setup
-WORKDIR /setup
-RUN git clone https://github.com/eclipse/paho.mqtt.c.git
-WORKDIR /setup/paho.mqtt.c
-RUN git checkout v1.3.8
-RUN cmake -Bbuild -H. -DPAHO_WITH_SSL=ON
-RUN cmake --build build/ --target install
-RUN ldconfig
-WORKDIR /setup
-RUN git clone https://github.com/eclipse/paho.mqtt.cpp
-WORKDIR /setup/paho.mqtt.cpp
-RUN cmake -Bbuild -H. -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=TRUE
-RUN cmake --build build/ --target install
 RUN ldconfig
 
+COPY ./compile.sh /
+RUN chmod +x /compile.sh
 WORKDIR /
 
-COPY /$0 /panduza-cxx-platform/
-COPY /$0/panduza /etc/panduza/
-COPY compile.sh compile.sh
-RUN chmod +x compile.sh
-RUN apt-get install -y kmod
+RUN useradd -m builder
+RUN echo "builder:builder" | chpasswd
+RUN adduser builder sudo
 
-ENTRYPOINT ["/compile.sh"]
+RUN groupadd usb
+RUN usermod -a -G usb builder
+
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER builder
+
+WORKDIR /home/builder
+RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
+WORKDIR panduza-cxx-class-boundary-scan
+RUN git checkout origin/create-first-version-of-boundary-scan-plugin
+
+WORKDIR /
+ENTRYPOINT ["./compile.sh"]

@@ -3,10 +3,21 @@
 #include <list>
 #include <string>
 #include <thread>
+#include <functional>
 #include "mqtt/async_client.h"
 #include "loguru/loguru.hxx"
+#include "plugins/entrypoint.hxx"
+
+#include <boost/dll/import.hpp>
+#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "meta_platform.hxx"
+#include "meta_drivers/meta_driver_io_fake.hxx"
+#include "meta_drivers/meta_driver_psu_fake.hxx"
+#include "meta_drivers/meta_driver_file_fake.hxx"
+
+using BSFMap = std::map<std::string,MetaDriverFactory *>;
 
 Metaplatform::Metaplatform(int argc, char *argv[])
 {
@@ -36,13 +47,30 @@ int Metaplatform::run()
 {
     // create seed for the random in the program
     srand(time(0));
-
     // Append factories
     // \todo Change this
-    // mFactories["io_fake"] = new MetaDriverFactoryIoFake();
-    mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
+    mFactories["io_fake"] = new MetaDriverFactoryIoFake();
+    mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
+    mFactories["file_fake"] = new MetaDriverFactoryFileFake();
+    // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
     // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
+    
+    // Create base path to load the plugin
+    boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
 
+    // create pointer on function
+    typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
+    boost::function<entrypoint_create_t> creator;
+    creator = boost::dll::import_alias<entrypoint_create_t>(
+        lib_path / "libBoundaryScan.so",
+        "get_factory",
+        boost::dll::load_mode::append_decorations
+    );
+
+    // call the plugin and get the factory
+    boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
+    BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
+    mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
@@ -129,18 +157,9 @@ void Metaplatform::generateInterfacesFromBrokerData(std::string broker_name, Jso
         const auto interface_name = interface["name"].asString().c_str();
         LOG_F(3, "Search for drivers in interface : %s", interface["name"].asString().c_str());
 
-        // load attached Interface
-        generateInterfaceFromData(interface, broker_name, broker_addr, broker_port);
+        // load attached Interface and search driver in the interface
+        searchMetaDriverFromInterface(interface, broker_name, broker_addr, broker_port);
     }
-}
-
-// ============================================================================
-//
-void Metaplatform::generateInterfaceFromData(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port)
-{
-    // search a driver in the interface
-    LOG_F(3, "Search for drivers in interface : %s", interface_json["name"].asString().c_str());
-    searchMetaDriverFromInterface(interface_json, broker_name, broker_addr, broker_port);
 }
 
 // ============================================================================
@@ -183,6 +202,7 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
     // Initializing the meta driver instance
     LOG_F(5, "Driver %s created, initializing variables...", driver_name.c_str());
+    LOG_F(ERROR, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
     driver_instance->initialize(mMachineName, broker_name, broker_addr, broker_port, interface_json);
 
     LOG_F(5, "Driver %s initialized.", driver_name.c_str());

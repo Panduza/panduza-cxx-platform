@@ -9,11 +9,10 @@
 #include "loguru/loguru.hxx"
 #include "mqtt/async_client.h"
 
+/// Meta Drivers template
 class MetaDriver : public virtual mqtt::callback, public virtual mqtt::iaction_listener
 {
 public:
-    /// Flag if the driver need another thread
-    bool mNeedThread = false;
     /// Retry count on reconnect, resetted when successful
     int mRetryCnt = 0;
 
@@ -25,8 +24,7 @@ public:
     void reconnect();
     /// (Re)connection success
     void connected(const std::string &cause) override;
-    /// Callback for when the connection is lost.
-    /// This will initiate the attempt to manually reconnect.
+    /// Callback for when the connection is lost. This will initiate the attempt to manually reconnect.
     void connection_lost(const std::string &cause) override;
     /// Callback function when a message arrives.
     virtual void message_arrived(mqtt::const_message_ptr msg) override;
@@ -60,38 +58,64 @@ public:
     /// subscribe to topics
     virtual void subscribe(std::string topic, int qoS);
 
-    /// Getter and Setter
+    /// Setter of the interface tree
     void setInterfaceTree(Json::Value interface_tree) { mInterfaceTree = interface_tree; };
+    /// Setter of the machine name
     void setMachineName(std::string machine_name) { mMachineName = machine_name; };
+    /// Setter of the broker name
     void setBrokerName(std::string broker_name) { mBrokerName = broker_name; };
+    /// Setter of the broker address
     void setBrokerAddr(std::string broker_addr) { mBrokerAddr = broker_addr; };
+    /// Setter of the broker port
     void setBrokerPort(std::string broker_port) { mBrokerPort = broker_port; };
+    /// Setter of the cliend id
     void setClientID(std::string client_id) { mClientID = client_id; };
+    /// Setter of the interface name
     void setInterfaceName(std::string interface_name) { mInterfaceName = interface_name; };
+    /// Setter of the driver name
     void setDriverName(std::string driver_name) { mDriverName = driver_name; };
+    /// Setter of the probe name
     void setProbeName(std::string probe_name) { mProbeName = probe_name; };
+    /// Setter of the base topic
     void setBaseTopic() { mBaseTopic = "pza/" + mMachineName + "/" + mInterfaceTree["driver"].asString(); };
+    /// Setter of the base commands topic
     void setBaseTopicCmds() { mBaseTopicCmd = mBaseTopic + "/cmds"; };
+    /// Setter of the base attributs topic
     void setBaseTopicAtts() { mBaseTopicAtts = mBaseTopic + "/atts"; };
+    /// Setter of the behaviour parameter
     void setBehaviour();
-    const Json::Value &getInterfaceTree() const { return mInterfaceTree; };
-    const std::string &getMachineName() const { return mMachineName; };
-    const std::string &getBrokerName() const { return mBrokerName; };
-    const std::string &getBrokerAddr() const { return mBrokerAddr; };
-    const std::string &getBrokerPort() const { return mBrokerPort; };
-    const std::string &getDriverName() const { return mDriverName; };
-    const std::string &getProbeName() const { return mProbeName; };
-    const std::string &getBaseTopic() const { return mBaseTopic; };
-    const std::string &getBaseTopicCmds() const { return mBaseTopicCmd; };
-    const std::string &getBaseTopicAtts() const { return mBaseTopicAtts; };
-    const std::string &getBehaviour() const { return mBehaviour; };
-    const std::shared_ptr<mqtt::async_client> &getClientMqtt() const { return mClientMqtt; };
+    /// Setter of the behaviour parameter by defining the parameter
     void setBehaviour(std::string behaviour) { mBehaviour = behaviour; };
+    /// Getter of the interface tree
+    const Json::Value &getInterfaceTree() const { return mInterfaceTree; };
+    /// Getter of the machine name
+    const std::string &getMachineName() const { return mMachineName; };
+    /// Getter of the broker name
+    const std::string &getBrokerName() const { return mBrokerName; };
+    /// Getter of the broker addr
+    const std::string &getBrokerAddr() const { return mBrokerAddr; };
+    /// Getter of the broker port
+    const std::string &getBrokerPort() const { return mBrokerPort; };
+    /// Getter of the driver name
+    const std::string &getDriverName() const { return mDriverName; };
+    /// Getter of the probe name
+    const std::string &getProbeName() const { return mProbeName; };
+    /// Getter of the base topic
+    const std::string &getBaseTopic() const { return mBaseTopic; };
+    /// Getter of the base commands topic
+    const std::string &getBaseTopicCmds() const { return mBaseTopicCmd; };
+    /// Getter of the base attributs topic
+    const std::string &getBaseTopicAtts() const { return mBaseTopicAtts; };
+    /// Getter of the behaviour parameter
+    const std::string &getBehaviour() const { return mBehaviour; };
+    /// Getter of the Mqtt Client
+    const std::shared_ptr<mqtt::async_client> &getClientMqtt() const { return mClientMqtt; };
 
 private:
+    /// The maximum number of retry
     int mRetry = 5;
 
-    /// Json needed
+    /// Json value of the interface tree
     Json::Value mInterfaceTree;
 
     /// Different value needed
@@ -117,6 +141,7 @@ private:
     std::mutex mPubMutex;
 };
 
+/// Meta Drivers Factory template
 class MetaDriverFactory
 {
 public:

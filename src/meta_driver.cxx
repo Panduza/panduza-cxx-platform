@@ -202,7 +202,8 @@ void MetaDriver::initialize(std::string machine_name, std::string broker_name, s
     setInterfaceTree(interface_json);
     setBrokerAddr(broker_addr);
     setBrokerPort(broker_port);
-    setInterfaceName(mInterfaceTree["name"].asString());
+    mInterfaceTree["name"].isNull() ? setInterfaceName("") : setInterfaceName(mInterfaceTree["name"].asString());
+    // setInterfaceName(mInterfaceTree["name"].asString());
     setDriverName(mInterfaceTree["driver"].asString());
     setProbeName(mInterfaceTree["settings"]["probe_name"].asString());
     setClientID(mMachineName + "_" + mDriverName + "_" + random);
@@ -227,3 +228,5 @@ void MetaDriver::initialize(std::string machine_name, std::string broker_name, s
 }
 
 void MetaDriver::setup() {}
+
+std::shared_ptr<MetaDriver> MetaDriverFactory::createDriver(void *arg){};

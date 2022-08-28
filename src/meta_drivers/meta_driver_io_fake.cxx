@@ -1,5 +1,17 @@
 #include "meta_driver_io_fake.hxx"
 
+MetaDriverIoFake::~MetaDriverIoFake()
+{
+    mKillThread = true;
+    if(mAlternativeThread)
+    {
+        mAlternativeThread->join();
+        delete mAlternativeThread;
+    }
+    mKillThread = false;
+    
+}
+
 void MetaDriverIoFake::setup()
 {
     // Subscribe to the different topic needed
@@ -8,6 +20,9 @@ void MetaDriverIoFake::setup()
 
     LOG_F(1, "Subscribed to %s and %s", (getBaseTopicCmds() + "/value/set").c_str(), (getBaseTopicCmds() + "/direction/set").c_str());
     LOG_F(1, "behaviour = %s", getBehaviour().c_str());
+    if (getBehaviour() == "auto_toggle"){
+        mAlternativeThread = new std::thread(&MetaDriverIoFake::autoToggle, this);
+    }
 }
 
 
@@ -26,6 +41,10 @@ void MetaDriverIoFake::sendInfo()
 
 void MetaDriverIoFake::autoToggle()
 {
+    Json::Value direction_payload;
+    direction_payload["direction"] = "out";
+    publish(getBaseTopicCmds() + "/direction/set", direction_payload, 0, false);
+
     while (1)
     {
         if (mValue == 1)
@@ -87,9 +106,11 @@ void MetaDriverIoFake::message_arrived(mqtt::const_message_ptr msg)
     }
 }
 
-std::shared_ptr<std::thread> MetaDriverIoFake::createAlternativeThread(){}
+std::shared_ptr<std::thread> MetaDriverIoFake::createAlternativeThread(){
+    return std::make_shared<std::thread>(&MetaDriverIoFake::autoToggle, this);
+}
 
-std::shared_ptr<MetaDriver> MetaDriverFactoryIoFake::createDriver()
+std::shared_ptr<MetaDriver> MetaDriverFactoryIoFake::createDriver(void *arg)
 {
     std::shared_ptr<MetaDriver> MetaDriverFactoryIoFakeInstance = std::make_shared<MetaDriverIoFake>();
 

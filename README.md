@@ -1,12 +1,13 @@
 # panduza-cxx-platform
 Panduza C++ Meta Drivers Manager 
 
-### Installation steps
+## Installation and starting steps
 
-This is the list of dependencies to install and steps to do it.
+This is the list of steps to install dependencies and run the platform
+
 1. Install Docker 
     
-5. Install mosquitto and add the configuration (for ubuntu)
+2. Install mosquitto and add the configuration (for ubuntu)
    ```sh
     sudo apt update
     sudo apt install -y mosquitto
@@ -17,7 +18,7 @@ This is the list of dependencies to install and steps to do it.
     sudo systemctl restart mosquitto
    ```
 
-6. Start the program (privilege needed):
+3. Start the program:
    ```sh
     ./start.sh
    ```

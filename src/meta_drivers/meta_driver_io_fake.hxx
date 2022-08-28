@@ -4,37 +4,43 @@
 
 #include "../meta_driver.hxx"
 
+/// Fake io meta driver for testing
 class MetaDriverIoFake : public MetaDriver
 {
-    public:
-        ~MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Destructor"); }
+public:
+    ~MetaDriverIoFake() ;
 
-        MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
+    MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
 
-        void setup();
+    void setup();
 
-        void sendInfo();
+    void sendInfo();
 
-        void autoToggle();
+    void autoToggle();
 
-        void message_arrived(mqtt::const_message_ptr msg) override;
+    void message_arrived(mqtt::const_message_ptr msg) override;
 
-        void setDirection(std::string direction) { mDirection = direction; };
-        void setValue(int value) { mValue = value; };
+    void setDirection(std::string direction) { mDirection = direction; };
+    void setValue(int value) { mValue = value; };
 
-        std::shared_ptr<std::thread> createAlternativeThread();
+    std::shared_ptr<std::thread> createAlternativeThread();
 
-    private:
-        std::string mDirection = "in";
-        int mValue = 1;
-    };
+private:
+    bool mKillThread = false;
+    std::thread *mAlternativeThread;
 
-    class MetaDriverFactoryIoFake : public MetaDriverFactory
-    {
-    public:
-        MetaDriverFactoryIoFake(){};
+    std::string mDirection = "in";
+    int mValue = 1;
+};
 
-        std::shared_ptr<MetaDriver> createDriver();
+/// Fake io meta driver factory for testing
+class MetaDriverFactoryIoFake : public MetaDriverFactory
+{
+public:
+    MetaDriverFactoryIoFake(){};
+
+    /// Create driver for io fake
+    std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 
 #endif
