@@ -52,21 +52,14 @@ int Metaplatform::run()
     // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
-    boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
+    boost::filesystem::path libraries_path("/usr/share/panduza-cxx/libraries");
+    boost::filesystem::path plugins_path("/usr/share/panduza-cxx/plugins");
 
-    // create pointer on function
-    typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
-    boost::function<entrypoint_create_t> creator;
-    creator = boost::dll::import_alias<entrypoint_create_t>(
-        lib_path / "libBoundaryScan.so",
-        "get_factory",
-        boost::dll::load_mode::append_decorations
-    );
+    LOG_F(INFO, "Loading generic plugin...");
+    loadPluginFromPath(libraries_path);
+    LOG_F(INFO, "Loading custom plugin...");
+    loadPluginFromPath(plugins_path);
 
-    // call the plugin and get the factory
-    boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
-    BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
-    mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
@@ -105,6 +98,35 @@ void Metaplatform::clearReloadableInterfaces()
         driver_instance.reset();
     }
     mDriverInstancesReloadableLoaded.clear();
+}
+
+void Metaplatform::loadPluginFromPath(boost::filesystem::path lib_path)
+{
+    if(!boost::filesystem::exists(lib_path))
+    {
+        return;
+    }
+
+    for(auto& file_path : boost::make_iterator_range(boost::filesystem::directory_iterator(lib_path), {}))
+    {
+        boost::dll::shared_library lib(file_path, boost::dll::load_mode::append_decorations);
+        if (!lib.has("get_factory")) {
+            // no such symbol
+            continue;
+        }
+        // create pointer on function
+        typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
+        boost::function<entrypoint_create_t> creator;
+        creator = boost::dll::import_alias<entrypoint_create_t>(
+            file_path,
+            "get_factory",
+            boost::dll::load_mode::append_decorations
+        );
+        // call the plugin and get the factory
+        boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
+        BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
+        mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
+    }
 }
 
 // ============================================================================

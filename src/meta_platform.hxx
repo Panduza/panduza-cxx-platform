@@ -57,6 +57,8 @@ public:
     /// Clear reloadable meta driver list
     void clearReloadableInterfaces();
 
+    void loadPluginFromPath(boost::filesystem::path lib_path);
+
 private:
     /// launching args, not used for now
     bool mLogEnabled;
