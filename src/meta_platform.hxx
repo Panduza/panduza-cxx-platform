@@ -59,6 +59,7 @@ public:
 
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
+    int mLoguruVerbose;
 private:
     /// launching args, not used for now
     bool mLogEnabled;
