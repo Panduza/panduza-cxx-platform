@@ -41,6 +41,7 @@ Metaplatform::Metaplatform(int argc, char *argv[])
 //
 int Metaplatform::run()
 {
+    mLoguruVerbose = loguru::g_stderr_verbosity;
     // create seed for the random in the program
     srand(time(0));
     // Append factories
