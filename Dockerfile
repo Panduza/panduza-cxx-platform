@@ -12,10 +12,8 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
          
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
-RUN apt-get install -y python3
-RUN apt-get install -y sudo
-RUN apt-get install -y kmod
+RUN apt-get update
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config libboost-program-options-dev python3 sudo kmod libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -46,7 +44,7 @@ USER builder
 WORKDIR /home/builder
 RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
 WORKDIR panduza-cxx-class-boundary-scan
-RUN git checkout origin/create-first-version-of-boundary-scan-plugin
+RUN git checkout origin/structuration-examples-artys7
 
 WORKDIR /
 ENTRYPOINT ["./compile.sh"]
