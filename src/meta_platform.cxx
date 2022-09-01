@@ -8,10 +8,6 @@
 #include "loguru/loguru.hxx"
 #include "plugins/entrypoint.hxx"
 
-#include <boost/dll/import.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include "meta_platform.hxx"
 #include "meta_drivers/meta_driver_io_fake.hxx"
 #include "meta_drivers/meta_driver_psu_fake.hxx"

@@ -8,6 +8,11 @@
 #include <mqtt/async_client.h>
 #include "meta_driver.hxx"
 
+#include <boost/dll/import.hpp>
+#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/range/iterator_range.hpp>
+
 /// Metaplatform class that will handle the platform and its plugins
 class Metaplatform
 {
