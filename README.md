@@ -7,6 +7,10 @@ This is the list of steps to install dependencies and run the platform
 
 1. Install Docker 
     
+2. In the case of an example, please refer to the example readme.
+
+If you're following the example stop to the step 2 above.
+
 2. Install mosquitto and add the configuration (for ubuntu)
    ```sh
     sudo apt update
