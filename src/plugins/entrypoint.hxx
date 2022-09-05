@@ -9,7 +9,7 @@
 class BOOST_SYMBOL_VISIBLE PluginEntrypoint
 {
 public:
-    /// Virtual Function that will return the driver name and factory of the plugin
+    /// Return the driver name and factory of the plugin
     virtual std::map<std::string, MetaDriverFactory *> getInformationAndFactory() = 0;
 };
 
