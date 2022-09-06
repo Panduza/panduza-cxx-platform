@@ -4,31 +4,31 @@
 
 #include "../meta_driver.hxx"
 
-/// @brief Fake io meta driver for testing
+/// Fake io meta driver for testing
 class MetaDriverIoFake : public MetaDriver
 {
 public:
-    /// @brief Destructor
+    /// Destructor
     ~MetaDriverIoFake() ;
-    /// @brief Constructor
+    /// Constructor
     MetaDriverIoFake() { LOG_F(9, "Meta Driver Io Fake Constructor"); };
-    /// @brief Setup the fake io meta driver
+    /// Setup the fake io meta driver
     void setup();
-    /// @brief Send info to the broker when receiving * in "pza" topic
+    /// Send info to the broker when receiving * in "pza" topic
     void sendInfo();
-    /// @brief Auto toggle IO
+    /// Auto toggle IO
     void autoToggle();
-    /// @brief Message arrived from the mqtt broker
+    /// Message arrived from the mqtt broker
     /// @param msg message received
     void message_arrived(mqtt::const_message_ptr msg) override;
-    /// @brief Set the direction of the IO
+    /// Set the direction of the IO
     /// @param direction direction of the IO to set
     void setDirection(std::string direction) { mDirection = direction; };
-    /// @brief set the value of the IO
+    /// set the value of the IO
     /// @param value value of the IO to set
     void setValue(int value) { mValue = value; };
 
-    /// @brief create an alternative thread to launch
+    /// create an alternative thread to launch
     /// @return Shared ptr of the thread to launch in parallel
     std::shared_ptr<std::thread> createAlternativeThread();
 
@@ -44,10 +44,10 @@ private:
 class MetaDriverFactoryIoFake : public MetaDriverFactory
 {
 public:
-    /// @brief Constructor
+    /// Constructor
     MetaDriverFactoryIoFake(){};
 
-    /// @brief Create driver for io fake
+    /// Create driver for io fake
     std::shared_ptr<MetaDriver> createDriver(void *arg);
 };
 
