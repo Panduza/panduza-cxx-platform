@@ -129,8 +129,6 @@ Json::Value MetaDriver::parseMsg(std::string payload)
     return parsedMsg;
 }
 
-std::shared_ptr<std::thread> MetaDriver::createAlternativeThread() {}
-
 void MetaDriver::subscribe(std::string topic, int qoS)
 {
     // subscribe to the topic selected with the qoS indicated
@@ -168,7 +166,7 @@ void MetaDriver::run()
 
     try
     {
-        LOG_F(INFO, "Connection to the MQTT server...");
+        LOG_SCOPE_F(INFO, "Connection to the MQTT server...");
         LOG_F(INFO, "Client ID : %s , Server addr : %s", mClientMqtt->get_client_id().c_str(), mClientMqtt->get_server_uri().c_str());
 
         // Try to connect to the Mqtt server
@@ -177,14 +175,14 @@ void MetaDriver::run()
         // Waiting the client to be connected
         while (!mClientMqtt->is_connected())
             ;
+        
+        LOG_F(INFO, "Instance connected %s", mClientMqtt->get_client_id().c_str());
     }
     catch (const mqtt::exception &exc)
     {
         std::cerr << "\nERROR: Unable to connect to MQTT server: '"
                   << mBrokerAddr << "'" << exc << std::endl;
     }
-
-    LOG_F(INFO, "Instance connected %s", mClientMqtt->get_client_id().c_str());
 
     // Start the setup function
     LOG_SCOPE_F(1, "start setup");

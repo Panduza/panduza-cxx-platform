@@ -1,6 +1,6 @@
 /**
  * @file   main.cpp
- * @brief  Main program
+ *  Main program
  * @author Adel
  */
 

@@ -17,16 +17,16 @@
 class Metaplatform
 {
 public:
-    /// Constructor with arguments
+    /// Constructor with argument @param argc Number of argument given from the start of the program @param argv Arguments
     Metaplatform(int argc, char *argv[]);
 
-    /// setter to enable log
+    /// Setter to enable log @param log boolean to enable log
     void setLog(bool log) { mLogEnabled = log; }
 
-    /// getter to get log status
+    /// getter to get log status @return return the log enable state
     bool getLog() const { return mLogEnabled; }
 
-    /// Set the tree direction directory
+    /// Set the tree direction directory @param tree Set the location of the tree
     void setTreeDirectory(std::string tree) { mTreeDirectory = tree; }
 
     /// get the tree direction directory
@@ -60,6 +60,7 @@ public:
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
     int mLoguruVerbose;
+
 private:
     /// launching args, not used for now
     bool mLogEnabled;
