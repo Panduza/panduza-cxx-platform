@@ -41,10 +41,32 @@ RUN usermod -a -G usb builder
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER builder
 
+WORKDIR /
+RUN sudo git clone https://github.com/Valossy/panduza-cxx-platform.git
+WORKDIR /panduza-cxx-platform
+RUN sudo mkdir -p build
+WORKDIR /panduza-cxx-platform/build
+RUN sudo cmake .. && sudo make install 
+RUN sudo mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.c-src
+RUN sudo mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
+
+RUN sudo cp -R _deps/paho.mqtt.c-src /usr/share/panduza-cxx/includes
+RUN sudo cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
+
+RUN sudo ldconfig
+
 WORKDIR /home/builder
 RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
-WORKDIR panduza-cxx-class-boundary-scan
+WORKDIR /home/builder/panduza-cxx-class-boundary-scan
 RUN git checkout origin/structuration-examples-artys7
+
+RUN mkdir -p build
+WORKDIR /home/builder/panduza-cxx-class-boundary-scan/build
+RUN sudo cmake .. && sudo make install
+
+RUN sudo mkdir /etc/panduza
+RUN sudo cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-arty-s7/panduza/tree.json /etc/panduza
+
 
 WORKDIR /
 ENTRYPOINT ["./compile.sh"]
