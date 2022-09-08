@@ -1,0 +1,24 @@
+version: '3'  
+ 
+services: 
+
+  panduza-platform:
+    container_name: panduza-cxx-platform
+    # image: ghcr.io/valossy/panduza-cxx-platform:main
+    build:
+      context: .
+    user: builder
+    network_mode: host
+    privileged: true
+    # volumes:
+    #   - ./:/panduza-cxx-platform
+      
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto-data/mosquitto.conf:/mosquitto/config/mosquitto.conf
