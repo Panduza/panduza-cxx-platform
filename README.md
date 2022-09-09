@@ -7,9 +7,14 @@ This is the list of steps to install dependencies and run the platform
 
 1. Install Docker 
     
-2. In the case of an example, please refer to the example readme.
+2. In the case of an example, please refer to the example readme for the setup
 
-If you're following the example stop to the step 2 above.
+3. Start the program:
+   ```sh
+    ./start.sh
+   ```
+
+<!-- If you're following the example stop to the step 2 above.
 
 2. Install mosquitto and add the configuration (for ubuntu)
    ```sh
@@ -25,4 +30,4 @@ If you're following the example stop to the step 2 above.
 3. Start the program:
    ```sh
     ./start.sh
-   ```
+   ``` -->
