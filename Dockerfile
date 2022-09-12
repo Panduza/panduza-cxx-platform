@@ -40,22 +40,21 @@ RUN groupadd usb
 RUN usermod -a -G usb builder
 
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER builder
 
 WORKDIR /
-RUN sudo git clone https://github.com/Panduza/panduza-cxx-platform.git
+RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
-RUN git checkout create-github-action
-RUN sudo mkdir -p build
+RUN git checkout origin/create-github-action
+RUN mkdir -p build
 WORKDIR /panduza-cxx-platform/build
-RUN sudo cmake .. && sudo make install 
-RUN sudo mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.c-src
-RUN sudo mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
+RUN cmake .. && make install 
+RUN mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.c-src
+RUN mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
 
-RUN sudo cp -R _deps/paho.mqtt.c-src /usr/share/panduza-cxx/includes
-RUN sudo cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
+RUN cp -R _deps/paho.mqtt.c-src /usr/share/panduza-cxx/includes
+RUN cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
 
-RUN sudo ldconfig
+RUN ldconfig
 
 WORKDIR /home/builder
 RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
@@ -64,11 +63,12 @@ RUN git checkout origin/structuration-examples-artys7
 
 RUN mkdir -p build
 WORKDIR /home/builder/panduza-cxx-class-boundary-scan/build
-RUN sudo cmake .. && sudo make install
+RUN cmake .. && make install
 
-RUN sudo mkdir /etc/panduza
-RUN sudo cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-arty-s7/panduza/tree.json /etc/panduza
+RUN mkdir /etc/panduza
+RUN cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-arty-s7/panduza/tree.json /etc/panduza
 
+USER builder
 
 WORKDIR /
 ENTRYPOINT ["./start-platform.sh"]
