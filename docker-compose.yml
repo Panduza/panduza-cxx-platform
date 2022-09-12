@@ -5,13 +5,9 @@ services:
   panduza-platform:
     container_name: panduza-cxx-platform
     image: ghcr.io/panduza/panduza-cxx-platform:create-github-action
-    # build:
-    #   context: .
     user: builder
     network_mode: host
     privileged: true
-    # volumes:
-    #   - ./:/panduza-cxx-platform
       
 
   mosquitto:
