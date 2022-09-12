@@ -43,7 +43,7 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER builder
 
 WORKDIR /
-RUN sudo git clone https://github.com/Valossy/panduza-cxx-platform.git
+RUN sudo git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
 RUN sudo mkdir -p build
 WORKDIR /panduza-cxx-platform/build
