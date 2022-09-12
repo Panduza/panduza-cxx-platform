@@ -5,4 +5,4 @@ rmmod usbserial
 
 cd /panduza-cxx-platform/build
 
-./panduza-cxx-platform -v 9
+sudo ./panduza-cxx-platform -v 9
