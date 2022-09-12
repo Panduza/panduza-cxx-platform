@@ -27,8 +27,8 @@ RUN chmod 0755 libftd2xx.so.1.4.24
 
 RUN ldconfig
 
-COPY ./compile.sh /
-RUN chmod +x /compile.sh
+COPY ./start-platform.sh /
+RUN chmod +x /start-platform.sh
 WORKDIR /
 
 RUN useradd -m builder
