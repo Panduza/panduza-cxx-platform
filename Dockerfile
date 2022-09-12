@@ -69,4 +69,4 @@ RUN sudo cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-a
 
 
 WORKDIR /
-ENTRYPOINT ["./compile.sh"]
+ENTRYPOINT ["./start-platform.sh"]
