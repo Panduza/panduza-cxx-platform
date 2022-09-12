@@ -27,6 +27,7 @@ RUN chmod 0755 libftd2xx.so.1.4.24
 
 RUN ldconfig
 
+WORKDIR /panduza-cxx-platform
 COPY ./start-platform.sh /
 RUN chmod +x /start-platform.sh
 WORKDIR /
