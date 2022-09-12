@@ -27,11 +27,6 @@ RUN chmod 0755 libftd2xx.so.1.4.24
 
 RUN ldconfig
 
-WORKDIR /panduza-cxx-platform
-COPY ./start-platform.sh /
-RUN chmod +x /start-platform.sh
-WORKDIR /
-
 RUN useradd -m builder
 RUN echo "builder:builder" | chpasswd
 RUN adduser builder sudo
@@ -45,6 +40,10 @@ WORKDIR /
 RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
 RUN git checkout origin/create-github-action
+
+COPY ./start-platform.sh /
+RUN chmod +x /start-platform.sh
+
 RUN mkdir -p build
 WORKDIR /panduza-cxx-platform/build
 RUN cmake .. && make install 
