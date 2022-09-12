@@ -45,6 +45,7 @@ USER builder
 WORKDIR /
 RUN sudo git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
+RUN git checkout create-github-action
 RUN sudo mkdir -p build
 WORKDIR /panduza-cxx-platform/build
 RUN sudo cmake .. && sudo make install 
