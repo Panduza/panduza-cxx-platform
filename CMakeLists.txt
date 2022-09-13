@@ -54,7 +54,6 @@ set(EXTRA_LIBS
 	dl 
 	ftd2xx 
 	pthread
-	boost_program_options
 	boost_filesystem
 	boost_system
 	# base64     #to uncomment if the library does load
