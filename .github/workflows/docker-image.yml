@@ -11,7 +11,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['create-github-action']
+    branches: ['structuration-examples-artys7']
 
 env:
   REGISTRY: ghcr.io
