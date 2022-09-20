@@ -39,7 +39,7 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /
 RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
-RUN git checkout origin/create-github-action
+RUN git checkout origin/structuration-examples-artys7
 
 COPY ./start-platform.sh /
 RUN chmod +x /start-platform.sh
