@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     // detects verbosity level on command line (-v LEVEL)
     // -v command line is used for loguru, it is not usable for other command
 
+    loguru::add_file("../logs/Platform.log", loguru::Append, loguru::Verbosity_MAX);
     loguru::init(argc, argv);
 
     Metaplatform *plat = new Metaplatform(argc, argv);

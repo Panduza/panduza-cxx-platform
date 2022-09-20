@@ -78,6 +78,8 @@ public:
     void setProbeName(std::string probe_name) { mProbeName = probe_name; };
     /// Setter of the base topic
     void setBaseTopic() { mBaseTopic = "pza/" + mMachineName + "/" + mInterfaceTree["driver"].asString(); };
+    /// Setter of the base topic with argument @param topic topic to set in the base topic
+    void setBaseTopic(std::string topic) { mBaseTopic = topic; };
     /// Setter of the base commands topic
     void setBaseTopicCmds() { mBaseTopicCmd = mBaseTopic + "/cmds"; };
     /// Setter of the base attributs topic
