@@ -50,7 +50,6 @@ int Metaplatform::run()
     mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
     mFactories["file_fake"] = new MetaDriverFactoryFileFake();
     // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
-    // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
     boost::filesystem::path libraries_path("/usr/share/panduza-cxx/libraries");
@@ -80,11 +79,15 @@ int Metaplatform::run()
         if (mDriverInstancesReloadableToLoad.size() >= 1)
         {
             // Move the front driver instance to the loaded driver list and
-            mDriverInstancesReloadableLoaded.emplace_back(mDriverInstancesReloadableToLoad.front());
-            mDriverInstancesReloadableToLoad.pop_front();
+            mDriverInstancesReloadableLoaded.emplace(mDriverInstancesReloadableToLoad.begin()->first, mDriverInstancesReloadableToLoad.begin()->second);
+            std::string list_instances_key = mDriverInstancesReloadableToLoad.begin()->first;
+            mDriverInstancesReloadableToLoad.erase(list_instances_key);
 
+            for (auto io_interface: mDriverInstancesReloadableLoaded[list_instances_key])
+            {
+                io_interface->run();
+            }
             // Run the driver instance
-            mDriverInstancesReloadableLoaded.back()->run();
         }
     }
 
@@ -96,7 +99,12 @@ void Metaplatform::clearReloadableInterfaces()
     // Loop into loaded driver instances and stop them
     for (auto driver_instance : mDriverInstancesReloadableLoaded)
     {
-        driver_instance.reset();
+        std::list<std::shared_ptr<MetaDriver>> io_list = driver_instance.second;
+        for(auto io_instance : io_list)
+        {
+            io_instance.reset();
+        }
+
     }
     mDriverInstancesReloadableLoaded.clear();
 }
