@@ -52,10 +52,10 @@ public:
     /// Add Meta Driver into static list
     void addStaticDriverInstance(std::shared_ptr<MetaDriver> driver_instance) { mDriverInstancesStatic.emplace_back(driver_instance); }
     /// Add Meta Driver into reloadable list
-    void addReloadableDriverInstance(std::shared_ptr<MetaDriver> driver_instance) { mDriverInstancesReloadableToLoad.emplace_back(driver_instance); }
+    void addReloadableDriverInstance(std::map<std::string,std::list<std::shared_ptr<MetaDriver>>> driver_instance) {LOG_F(ERROR, "%s", driver_instance.begin()->first.c_str()); mDriverInstancesReloadableToLoad.emplace(driver_instance.begin()->first,driver_instance.begin()->second); }
 
     /// Clear reloadable meta driver list
-    void clearReloadableInterfaces();
+    void clearReloadableInterfaces(std::string key_list_to_reload);
 
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
@@ -78,13 +78,9 @@ private:
         std::shared_ptr<MetaDriver>>
         mDriverInstancesStatic;
 
-    std::list<
-        std::shared_ptr<MetaDriver>>
-        mDriverInstancesReloadableToLoad;
+    std::map<std::string, std::list<std::shared_ptr<MetaDriver>>> mDriverInstancesReloadableToLoad;
 
-    std::list<
-        std::shared_ptr<MetaDriver>>
-        mDriverInstancesReloadableLoaded;
+    std::map<std::string, std::list<std::shared_ptr<MetaDriver>>> mDriverInstancesReloadableLoaded;
 };
 
 #endif
