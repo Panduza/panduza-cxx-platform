@@ -94,19 +94,21 @@ int Metaplatform::run()
     return 1;
 }
 
-void Metaplatform::clearReloadableInterfaces()
+void Metaplatform::clearReloadableInterfaces(std::string key_list_to_reload)
 {
     // Loop into loaded driver instances and stop them
     for (auto driver_instance : mDriverInstancesReloadableLoaded)
     {
-        std::list<std::shared_ptr<MetaDriver>> io_list = driver_instance.second;
-        for(auto io_instance : io_list)
+        if (driver_instance.first == key_list_to_reload)
         {
-            io_instance.reset();
+            std::list<std::shared_ptr<MetaDriver>> io_list = driver_instance.second;
+            for(auto io_instance : io_list)
+            {
+                io_instance.reset();
+            }
         }
-
     }
-    mDriverInstancesReloadableLoaded.clear();
+    mDriverInstancesReloadableLoaded.erase(key_list_to_reload);
 }
 
 void Metaplatform::loadPluginFromPath(boost::filesystem::path lib_path)

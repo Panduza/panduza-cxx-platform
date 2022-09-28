@@ -55,7 +55,7 @@ public:
     void addReloadableDriverInstance(std::map<std::string,std::list<std::shared_ptr<MetaDriver>>> driver_instance) {LOG_F(ERROR, "%s", driver_instance.begin()->first.c_str()); mDriverInstancesReloadableToLoad.emplace(driver_instance.begin()->first,driver_instance.begin()->second); }
 
     /// Clear reloadable meta driver list
-    void clearReloadableInterfaces();
+    void clearReloadableInterfaces(std::string key_list_to_reload);
 
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
