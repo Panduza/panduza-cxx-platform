@@ -1,7 +1,7 @@
 /**
- * @file   main.cpp
+ * @file   main.cxx
  *  Main program
- * @author Adel
+ * @author Adel, Valentin
  */
 
 #include <iostream>

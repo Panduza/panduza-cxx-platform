@@ -1,3 +1,9 @@
+/**
+ * @file   meta_platform.cxx
+ *  Manage the panduza platform
+ * @author Valentin
+ */
+
 #ifndef _METAPLATFORM_
 #define _METAPLATFORM_
 #pragma once
@@ -29,7 +35,7 @@ public:
     /// Set the tree direction directory @param tree Set the location of the tree
     void setTreeDirectory(std::string tree) { mTreeDirectory = tree; }
 
-    /// get the tree direction directory
+    /// get the tree direction directory @return tree directory path
     const std::string &getTreeDirectory() const { return mTreeDirectory; }
 
     /// Initialize all driver instances and launch interfaces and threads needed
@@ -38,27 +44,44 @@ public:
     /// Parse the tree file to generate the interfaces
     void generateInterfacesFromTreeFile();
 
-    /// loop into interfaces of the broker to find drivers
+    /// loop into interfaces of the broker to find drivers @param broker_name Name of the broker @param broker_json Json content of the broker tree
     void generateInterfacesFromBrokerData(std::string broker_name, Json::Value broker_json);
 
-    /// Check if driver of the interface is available and load if the case
+
+    /// @brief Check if driver of the interface is available and load if the case 
+    /// @param interface_json Json content of the interface tree
+    /// @param broker_name Name of the broker
+    /// @param broker_addr Address of the broker
+    /// @param broker_port Port of the broker
     void searchMetaDriverFromInterface(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port);
-    /// Load the driver
+
+    /// @brief Load the driver
+    /// @param interface_json Json content of the interface tree
+    /// @param broker_name Name of the broker
+    /// @param broker_addr Address of the broker
+    /// @param broker_port Port of the broker
     void loadMetaDriver(Json::Value interface_json, std::string broker_name, std::string broker_addr, std::string broker_port);
 
-    /// Gettter for the list of interfaces
+    /// @brief Gettter for the list of interfaces
+    /// @return list of static interfaces that don't need to be reloaded during the whole platform ruuning time
     const std::list<std::shared_ptr<MetaDriver>> &getStaticInterfaces() const { return mDriverInstancesStatic; }
 
-    /// Add Meta Driver into static list
+    /// @brief Add Meta Driver into static list
+    /// @param driver_instance Instance of a driver
     void addStaticDriverInstance(std::shared_ptr<MetaDriver> driver_instance) { mDriverInstancesStatic.emplace_back(driver_instance); }
-    /// Add Meta Driver into reloadable list
+
+    /// @brief Add Meta Driver into reloadable list
+    /// @param driver_instance Instance of a Meta Driver
     void addReloadableDriverInstance(std::map<std::string,std::list<std::shared_ptr<MetaDriver>>> driver_instance) {LOG_F(ERROR, "%s", driver_instance.begin()->first.c_str()); mDriverInstancesReloadableToLoad.emplace(driver_instance.begin()->first,driver_instance.begin()->second); }
 
-    /// Clear reloadable meta driver list
+    /// @brief Clear reloadable meta driver list
     void clearReloadableInterfaces(std::string key_list_to_reload);
 
+    /// @brief Load plugins from a defined path
+    /// @param lib_path path of the plugins' directory
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
+    /// @brief Verbose needed for loguru
     int mLoguruVerbose;
 
 private:
