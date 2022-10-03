@@ -227,4 +227,17 @@ void MetaDriver::initialize(std::string machine_name, std::string broker_name, s
 
 void MetaDriver::setup() {}
 
+void MetaDriver::setBaseTopic()
+{
+    if(!getInterfaceTree()["group_name"].isNull())
+    {
+        mBaseTopic = "pza/" + mMachineName + "/" + mInterfaceTree["group_name"].asString();
+    }
+    else
+    {
+        mBaseTopic = "pza/" + mMachineName + "/" + mInterfaceTree["driver"].asString();
+    }
+}    
+
+
 std::shared_ptr<MetaDriver> MetaDriverFactory::createDriver(void *arg){};
