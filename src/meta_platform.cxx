@@ -60,6 +60,17 @@ int Metaplatform::run()
     LOG_F(INFO, "Loading custom plugin...");
     loadPluginFromPath(plugins_path);
 
+    char *test = std::getenv("AUTODETECT");
+    int test_int = (*test) - 48; //as 0 is 48 and 1 is 49 in ascii
+    LOG_F(ERROR,"env : %d", test_int);
+    if(test_int == 1)
+    {
+        LOG_F(ERROR,"GOING INTO AUTODETECT");
+        autodetectInterfaces();
+        return 0;
+    }
+    // LOG_F(ERROR,"%d", (int)test);
+    exit(0);
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
@@ -238,4 +249,47 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
     // Append the created interface to the intefraces managed by the platform
     mDriverInstancesStatic.emplace_back(driver_instance);
+}
+
+void Metaplatform::autodetectInterfaces()
+{
+    LOG_F(INFO, "AUTODETECT MODE ENABLED");
+    std::shared_ptr<std::ofstream> file = std::make_shared<std::ofstream>();
+    Json::Value fake_interface_json;
+    
+    file->open("/etc/panduza/platform/cxx.json");
+    
+
+    fake_interface_json.append(createFakeInterfaceJson("IO","io_fake","static"));
+    fake_interface_json.append(createFakeInterfaceJson("PSU","psu_fake","manual"));
+    fake_interface_json.append(createFakeInterfaceJson("FILE","file_fake","manual"));
+
+    (*file) << fake_interface_json.toStyledString();
+
+    file->close();
+}
+
+Json::Value Metaplatform::createFakeInterfaceJson(std::string name, std::string driver, std::string behaviour)
+{
+    Json::Value json;
+
+    json["name"] = name;
+    json["driver"] = driver;
+    json["settings"] = createGroups("behaviour",behaviour.c_str());
+
+    return json;
+}
+
+Json::Value Metaplatform::createGroups(std::string key, std::string value)
+{
+    Json::Value to_return;
+
+    to_return[key] = value;
+
+    // for(auto map_i: map)
+    // {
+    //     to_return[map_i.first] = map_i.second;
+    // }   
+    return to_return;
+
 }

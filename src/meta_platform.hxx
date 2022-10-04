@@ -88,6 +88,11 @@ public:
     /// @param lib_path path of the plugins' directory
     void loadPluginFromPath(boost::filesystem::path lib_path);
 
+    void autodetectInterfaces();
+    Json::Value createGroups(std::string key,std::string value);
+
+    Json::Value createFakeInterfaceJson(std::string name, std::string driver, std::string behaviour);
+
     /// @brief Verbose needed for loguru
     int mLoguruVerbose;
 
