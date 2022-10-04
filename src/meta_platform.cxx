@@ -67,10 +67,12 @@ int Metaplatform::run()
     {
         LOG_F(ERROR,"GOING INTO AUTODETECT");
         autodetectInterfaces();
+
+        LOG_F(INFO, "Available interfaces template generated, stopping the program...");
         return 0;
     }
-    // LOG_F(ERROR,"%d", (int)test);
-    exit(0);
+
+
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
@@ -94,11 +96,11 @@ int Metaplatform::run()
             std::string list_instances_key = mDriverInstancesReloadableToLoad.begin()->first;
             mDriverInstancesReloadableToLoad.erase(list_instances_key);
 
+            // Run the driver instance
             for (auto io_interface: mDriverInstancesReloadableLoaded[list_instances_key])
             {
                 io_interface->run();
             }
-            // Run the driver instance
         }
     }
 
@@ -242,7 +244,7 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
     // Initializing the meta driver instance
     LOG_F(5, "Driver %s created, initializing variables...", driver_name.c_str());
-    LOG_F(ERROR, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
+    LOG_F(INFO, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
     driver_instance->initialize(mMachineName, broker_name, broker_addr, broker_port, interface_json);
 
     LOG_F(5, "Driver %s initialized.", driver_name.c_str());
@@ -259,14 +261,9 @@ void Metaplatform::autodetectInterfaces()
     
     file.open("/etc/panduza/platform/cxx.json");
 
-    // fake_interface_json.append(createFakeInterfaceJson("IO","io_fake","static"));
-    // fake_interface_json.append(createFakeInterfaceJson("PSU","psu_fake","manual"));
-    // fake_interface_json.append(createFakeInterfaceJson("FILE","file_fake","manual"));
-
-    // (*file) << fake_interface_json.toStyledString();
-
     for (auto mFactory: mFactories)
     {
+        LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
         json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
     }
 
