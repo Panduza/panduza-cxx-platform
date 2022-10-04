@@ -60,10 +60,10 @@ int Metaplatform::run()
     LOG_F(INFO, "Loading custom plugin...");
     loadPluginFromPath(plugins_path);
 
-    char *test = std::getenv("AUTODETECT");
-    int test_int = (*test) - 48; //as 0 is 48 and 1 is 49 in ascii
-    LOG_F(ERROR,"env : %d", test_int);
-    if(test_int == 1)
+    char *AUTODETECT = std::getenv("AUTODETECT");
+    int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
+    LOG_F(ERROR,"env : %d", autodetect_int);
+    if(autodetect_int == 1)
     {
         LOG_F(ERROR,"GOING INTO AUTODETECT");
         autodetectInterfaces();
@@ -254,42 +254,23 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 void Metaplatform::autodetectInterfaces()
 {
     LOG_F(INFO, "AUTODETECT MODE ENABLED");
-    std::shared_ptr<std::ofstream> file = std::make_shared<std::ofstream>();
-    Json::Value fake_interface_json;
-    
-    file->open("/etc/panduza/platform/cxx.json");
-    
-
-    fake_interface_json.append(createFakeInterfaceJson("IO","io_fake","static"));
-    fake_interface_json.append(createFakeInterfaceJson("PSU","psu_fake","manual"));
-    fake_interface_json.append(createFakeInterfaceJson("FILE","file_fake","manual"));
-
-    (*file) << fake_interface_json.toStyledString();
-
-    file->close();
-}
-
-Json::Value Metaplatform::createFakeInterfaceJson(std::string name, std::string driver, std::string behaviour)
-{
+    std::ofstream file;
     Json::Value json;
+    
+    file.open("/etc/panduza/platform/cxx.json");
 
-    json["name"] = name;
-    json["driver"] = driver;
-    json["settings"] = createGroups("behaviour",behaviour.c_str());
+    // fake_interface_json.append(createFakeInterfaceJson("IO","io_fake","static"));
+    // fake_interface_json.append(createFakeInterfaceJson("PSU","psu_fake","manual"));
+    // fake_interface_json.append(createFakeInterfaceJson("FILE","file_fake","manual"));
 
-    return json;
-}
+    // (*file) << fake_interface_json.toStyledString();
 
-Json::Value Metaplatform::createGroups(std::string key, std::string value)
-{
-    Json::Value to_return;
+    for (auto mFactory: mFactories)
+    {
+        json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+    }
 
-    to_return[key] = value;
+    file << json.toStyledString() << std::endl;
 
-    // for(auto map_i: map)
-    // {
-    //     to_return[map_i.first] = map_i.second;
-    // }   
-    return to_return;
-
+    file.close();
 }

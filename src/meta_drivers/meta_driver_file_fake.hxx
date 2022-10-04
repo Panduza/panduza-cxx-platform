@@ -23,6 +23,8 @@ public:
     /// launched when a message arrived on subscribed topics @param msg Messaged received from the broker on a subscribed topic
     void message_arrived(mqtt::const_message_ptr msg);
 
+    Json::Value generateAutodetectInfo();
+
 private:
     std::string mDecodedBSDL;
     std::string mBSDLName;

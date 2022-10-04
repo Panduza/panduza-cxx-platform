@@ -110,6 +110,24 @@ std::shared_ptr<std::thread> MetaDriverIoFake::createAlternativeThread(){
     return std::make_shared<std::thread>(&MetaDriverIoFake::autoToggle, this);
 }
 
+Json::Value MetaDriverIoFake::generateAutodetectInfo()
+{
+    Json::Value json;
+    Json::Value template_json;
+
+    template_json["name"] = "IO";
+    template_json["driver"] = "io_fake";
+    template_json["settings"]["behaviour"] = "manual | auto_toggle";
+    
+    json["name"] = "io_fake";
+    json["version"] = "1.0";
+    json["description"] = "Fake io interface";
+    json["template"] = template_json;
+    json["autodetect"] = Json::arrayValue;
+
+    return json;
+}
+
 std::shared_ptr<MetaDriver> MetaDriverFactoryIoFake::createDriver(void *arg)
 {
     std::shared_ptr<MetaDriver> MetaDriverFactoryIoFakeInstance = std::make_shared<MetaDriverIoFake>();

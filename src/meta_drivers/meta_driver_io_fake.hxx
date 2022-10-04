@@ -39,6 +39,8 @@ public:
     /// @return Shared ptr of the thread to launch in parallel
     std::shared_ptr<std::thread> createAlternativeThread();
 
+    Json::Value generateAutodetectInfo();
+
 private:
     bool mKillThread = false;
     std::thread *mAlternativeThread;

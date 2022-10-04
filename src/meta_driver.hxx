@@ -5,6 +5,7 @@
 #include <iostream>
 #include <jsoncpp/json/json.h>
 #include <algorithm>
+#include <fstream>
 
 #include "loguru/loguru.hxx"
 #include "mqtt/async_client.h"
@@ -112,6 +113,8 @@ public:
     const std::string &getBehaviour() const { return mBehaviour; };
     /// Getter of the Mqtt Client @return Shared ptr of the MQTT Client
     const std::shared_ptr<mqtt::async_client> &getClientMqtt() const { return mClientMqtt; };
+
+    virtual Json::Value generateAutodetectInfo();
 
 private:
     /// The maximum number of retry

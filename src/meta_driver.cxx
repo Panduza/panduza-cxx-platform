@@ -239,5 +239,6 @@ void MetaDriver::setBaseTopic()
     }
 }    
 
+Json::Value MetaDriver::generateAutodetectInfo(){};
 
 std::shared_ptr<MetaDriver> MetaDriverFactory::createDriver(void *arg){};
