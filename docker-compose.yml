@@ -8,6 +8,11 @@ services:
     privileged: true
     environment:
       - AUTODETECT
+    volumes:
+      - ./panduza/tree.json:/etc/panduza/tree.json
+      - ./logs:/panduza-cxx-platform/logs
+      - ./BoundaryScan:/etc/panduza/BoundaryScan
+      - ./platform:/etc/panduza/platform
     
   mosquitto:
     container_name: mosquitto
