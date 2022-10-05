@@ -27,7 +27,23 @@ void MetaDriverPsuFake::sendInfo()
     publish(getBaseTopic()+"/info", info, 0, false);
 }
 
+Json::Value MetaDriverPsuFake::generateAutodetectInfo()
+{
+    Json::Value json;
+    Json::Value template_json;
 
+    template_json["name"] = "PSU";
+    template_json["driver"] = "psu_fake";
+    template_json["settings"]["behaviour"] = "manual";
+
+    json["name"] = "psu_fake";
+    json["version"] = "1.0";
+    json["description"] = "Fake psu interface";
+    json["template"] = template_json;
+    json["autodetect"] = Json::arrayValue;
+
+    return json;
+}
 
 MetaDriverFactoryPsuFake::MetaDriverFactoryPsuFake(){}
 

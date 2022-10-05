@@ -13,7 +13,7 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config python3 sudo kmod libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
+RUN apt-get install -y build-essential gcc make git cmake libssl-dev wget pkg-config python3 kmod libjsoncpp-dev libboost-filesystem-dev libboost-system-dev
 
 WORKDIR /temp
 RUN echo "Install libftdi..."
@@ -27,14 +27,8 @@ RUN chmod 0755 libftd2xx.so.1.4.24
 
 RUN ldconfig
 
-RUN useradd -m builder
-RUN echo "builder:builder" | chpasswd
-RUN adduser builder sudo
-
 RUN groupadd usb
-RUN usermod -a -G usb builder
-
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN usermod -a -G usb root
 
 WORKDIR /
 RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
@@ -67,7 +61,6 @@ RUN cmake .. && make install
 RUN mkdir /etc/panduza
 RUN cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-arty-s7/panduza/tree.json /etc/panduza
 
-USER builder
 
 WORKDIR /
 ENTRYPOINT ["./start-platform.sh"]

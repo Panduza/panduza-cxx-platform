@@ -16,6 +16,9 @@ class MetaDriverPsuFake : public MetaDriver {
         void setup();
         /// Send the info of the meta driver when receiving * in the "pza" topic
         void sendInfo();
+
+        Json::Value generateAutodetectInfo();
+
 };
 
 /// Fake psu meta driver factory for testing

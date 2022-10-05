@@ -98,6 +98,25 @@ void MetaDriverFileFake::message_arrived(mqtt::const_message_ptr msg)
     }
 }
 
+Json::Value MetaDriverFileFake::generateAutodetectInfo()
+{
+    Json::Value json;
+    Json::Value template_json;
+
+    template_json["name"] = "FILE";
+    template_json["driver"] = "file_fake";
+    template_json["settings"]["behaviour"] = "manual";
+
+
+    json["name"] = "file_fake";
+    json["version"] = "1.0";
+    json["description"] = "Fake file interface";
+    json["template"] = template_json;
+    json["autodetect"] = Json::arrayValue;
+
+    return json;
+}
+
 // ============================================================================
 //
 

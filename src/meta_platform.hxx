@@ -23,16 +23,21 @@
 class Metaplatform
 {
 public:
-    /// Constructor with argument @param argc Number of argument given from the start of the program @param argv Arguments
+    /// @brief Constructor with argument
+    /// @param argc Number of argument given from the start of the program
+    /// @param argv Arguments
     Metaplatform(int argc, char *argv[]);
 
-    /// Setter to enable log @param log boolean to enable log
+    /// @brief Setter to enable log
+    /// @param log boolean to enable log
     void setLog(bool log) { mLogEnabled = log; }
 
-    /// getter to get log status @return return the log enable state
+    /// @brief getter to get log status
+    /// @return return the log enable state
     bool getLog() const { return mLogEnabled; }
 
-    /// Set the tree direction directory @param tree Set the location of the tree
+    /// @brief Set the tree direction directory
+    /// @param tree Set the location of the tree
     void setTreeDirectory(std::string tree) { mTreeDirectory = tree; }
 
     /// get the tree direction directory @return tree directory path
@@ -44,7 +49,9 @@ public:
     /// Parse the tree file to generate the interfaces
     void generateInterfacesFromTreeFile();
 
-    /// loop into interfaces of the broker to find drivers @param broker_name Name of the broker @param broker_json Json content of the broker tree
+    /// @brief loop into interfaces of the broker to find drivers
+    /// @param broker_name Name of the broker
+    /// @param broker_json Json content of the broker tree
     void generateInterfacesFromBrokerData(std::string broker_name, Json::Value broker_json);
 
 
@@ -80,6 +87,11 @@ public:
     /// @brief Load plugins from a defined path
     /// @param lib_path path of the plugins' directory
     void loadPluginFromPath(boost::filesystem::path lib_path);
+
+    void autodetectInterfaces();
+    Json::Value createGroups(std::string key,std::string value);
+
+    Json::Value createFakeInterfaceJson(std::string name, std::string driver, std::string behaviour);
 
     /// @brief Verbose needed for loguru
     int mLoguruVerbose;

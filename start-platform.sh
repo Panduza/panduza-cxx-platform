@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sudo rmmod ftdi_sio
-sudo rmmod usbserial
+rmmod ftdi_sio
+rmmod usbserial
 
 cd /panduza-cxx-platform/build
 
-sudo ./panduza-cxx-platform -v 9
+./panduza-cxx-platform -v 9
