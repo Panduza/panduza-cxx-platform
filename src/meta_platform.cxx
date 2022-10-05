@@ -60,18 +60,20 @@ int Metaplatform::run()
     LOG_F(INFO, "Loading custom plugin...");
     loadPluginFromPath(plugins_path);
 
-    char *AUTODETECT = std::getenv("AUTODETECT");
-    int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
-    LOG_F(ERROR,"env : %d", autodetect_int);
-    if(autodetect_int == 1)
+    if(std::getenv("AUTODETECT"))
     {
-        LOG_F(ERROR,"GOING INTO AUTODETECT");
-        autodetectInterfaces();
+        char *AUTODETECT = std::getenv("AUTODETECT");
+        int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
+        LOG_F(ERROR,"env : %d", autodetect_int);
+        if(autodetect_int == 1)
+        {
+            LOG_F(ERROR,"GOING INTO AUTODETECT");
+            autodetectInterfaces();
 
-        LOG_F(INFO, "Available interfaces template generated, stopping the program...");
-        return 0;
+            LOG_F(INFO, "Available interfaces template generated, stopping the program...");
+            return 0;
+        }
     }
-
 
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
