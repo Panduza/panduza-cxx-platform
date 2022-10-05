@@ -156,7 +156,7 @@ void MetaDriver::run()
     LOG_F(5, "Starting Meta Driver run function");
 
     // create the meta driver clientMqtt and git some connection option
-    mClientMqtt = std::make_shared<mqtt::async_client>(mBrokerAddr, mClientID);
+    mClientMqtt = std::make_shared<mqtt::async_client>(mBrokerAddr + ":" + mBrokerPort, mClientID);
     connOpts = mqtt::connect_options_builder()
                    .clean_session()
                    .finalize();
