@@ -1,0 +1,10 @@
+{
+    "machine": "rpi4_test",
+    "brokers": {
+        "boundaryscanner": {
+            "addr": "localhost",
+            "port": 1883,
+            "interfaces": []
+        }
+    }
+}
