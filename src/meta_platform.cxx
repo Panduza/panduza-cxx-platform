@@ -79,6 +79,12 @@ int Metaplatform::run()
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
 
+    if(getStaticInterfaces().size() <= 0)
+    {
+        LOG_F(ERROR, "No instances to load from the tree, exiting...");
+        exit(0);
+    }
+
     // loop into the interfaces created and run all interfaces
     for (const auto &interface : getStaticInterfaces())
     {
