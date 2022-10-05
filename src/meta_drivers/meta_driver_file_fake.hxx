@@ -14,20 +14,16 @@ public:
     /// Constructor
     MetaDriverFileFake();
 
-    /// Create an alternative thread when needed
-    // std::shared_ptr<std::thread> createAlternativeThread() { return std::make_shared<std::thread>(&MetaDriverFileFake::test, this); }
-
     /// Setup the meta driver
     void setup();
 
     /// Send info
     void sendInfo();
 
-    /// launched when a message arrived on subscribed topics
+    /// launched when a message arrived on subscribed topics @param msg Messaged received from the broker on a subscribed topic
     void message_arrived(mqtt::const_message_ptr msg);
 
-    /// Actual thread, to change
-    void test();
+    Json::Value generateAutodetectInfo();
 
 private:
     std::string mDecodedBSDL;

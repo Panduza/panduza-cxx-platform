@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # set the project name and version
-project(Scan LANGUAGES CXX)
+project(panduza-cxx-platform LANGUAGES CXX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -I/usr/include/jsoncpp")
 
 # specify the C++ standard
@@ -54,7 +54,6 @@ set(EXTRA_LIBS
 	dl 
 	ftd2xx 
 	pthread
-	boost_program_options
 	boost_filesystem
 	boost_system
 	# base64     #to uncomment if the library does load
@@ -72,16 +71,16 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 
 # add the executable
-add_executable(Scan ${SOURCES})
+add_executable(panduza-cxx-platform ${SOURCES})
 add_library(Metaplatform SHARED ${SOURCES})
 # add_library(Metaplatform SHARED ${SOURCES-METAPLAFORM-LIBRARY})
 target_link_libraries(Metaplatform PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
 
 # link libraries with the executable
-target_link_libraries(Scan PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
+target_link_libraries(panduza-cxx-platform PUBLIC ${EXTRA_LIBS} ${JSONCPP_LIBRARIES} ${MQTT_LIBRARIES})
 
 # add the binary tree to the search path for include files
-target_include_directories(Scan PUBLIC "${PROJECT_BINARY_DIR}")
+target_include_directories(panduza-cxx-platform PUBLIC "${PROJECT_BINARY_DIR}")
 
 install(TARGETS paho-mqtt3as paho-mqtt3c paho-mqttpp3
 		LIBRARY DESTINATION /usr/local/lib

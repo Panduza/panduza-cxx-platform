@@ -8,10 +8,6 @@
 #include "loguru/loguru.hxx"
 #include "plugins/entrypoint.hxx"
 
-#include <boost/dll/import.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include "meta_platform.hxx"
 #include "meta_drivers/meta_driver_io_fake.hxx"
 #include "meta_drivers/meta_driver_psu_fake.hxx"
@@ -45,6 +41,7 @@ Metaplatform::Metaplatform(int argc, char *argv[])
 //
 int Metaplatform::run()
 {
+    mLoguruVerbose = loguru::g_stderr_verbosity;
     // create seed for the random in the program
     srand(time(0));
     // Append factories
@@ -53,24 +50,31 @@ int Metaplatform::run()
     mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
     mFactories["file_fake"] = new MetaDriverFactoryFileFake();
     // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
-    // mFactories["Scan_serviceA7"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
-    boost::filesystem::path lib_path("/usr/share/panduza-cxx/libraries");
+    boost::filesystem::path libraries_path("/usr/share/panduza-cxx/libraries");
+    boost::filesystem::path plugins_path("/usr/share/panduza-cxx/plugins");
 
-    // create pointer on function
-    typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
-    boost::function<entrypoint_create_t> creator;
-    creator = boost::dll::import_alias<entrypoint_create_t>(
-        lib_path / "libBoundaryScan.so",
-        "get_factory",
-        boost::dll::load_mode::append_decorations
-    );
+    LOG_F(INFO, "Loading generic plugin...");
+    loadPluginFromPath(libraries_path);
+    LOG_F(INFO, "Loading custom plugin...");
+    loadPluginFromPath(plugins_path);
 
-    // call the plugin and get the factory
-    boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
-    BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
-    mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
+    if(std::getenv("AUTODETECT"))
+    {
+        char *AUTODETECT = std::getenv("AUTODETECT");
+        int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
+        LOG_F(ERROR,"env : %d", autodetect_int);
+        if(autodetect_int == 1)
+        {
+            LOG_F(ERROR,"GOING INTO AUTODETECT");
+            autodetectInterfaces();
+
+            LOG_F(INFO, "Available interfaces template generated, stopping the program...");
+            return 0;
+        }
+    }
+
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
@@ -90,25 +94,65 @@ int Metaplatform::run()
         if (mDriverInstancesReloadableToLoad.size() >= 1)
         {
             // Move the front driver instance to the loaded driver list and
-            mDriverInstancesReloadableLoaded.emplace_back(mDriverInstancesReloadableToLoad.front());
-            mDriverInstancesReloadableToLoad.pop_front();
+            mDriverInstancesReloadableLoaded.emplace(mDriverInstancesReloadableToLoad.begin()->first, mDriverInstancesReloadableToLoad.begin()->second);
+            std::string list_instances_key = mDriverInstancesReloadableToLoad.begin()->first;
+            mDriverInstancesReloadableToLoad.erase(list_instances_key);
 
             // Run the driver instance
-            mDriverInstancesReloadableLoaded.back()->run();
+            for (auto io_interface: mDriverInstancesReloadableLoaded[list_instances_key])
+            {
+                io_interface->run();
+            }
         }
     }
 
     return 1;
 }
 
-void Metaplatform::clearReloadableInterfaces()
+void Metaplatform::clearReloadableInterfaces(std::string key_list_to_reload)
 {
     // Loop into loaded driver instances and stop them
     for (auto driver_instance : mDriverInstancesReloadableLoaded)
     {
-        driver_instance.reset();
+        if (driver_instance.first == key_list_to_reload)
+        {
+            std::list<std::shared_ptr<MetaDriver>> io_list = driver_instance.second;
+            for(auto io_instance : io_list)
+            {
+                io_instance.reset();
+            }
+        }
     }
-    mDriverInstancesReloadableLoaded.clear();
+    mDriverInstancesReloadableLoaded.erase(key_list_to_reload);
+}
+
+void Metaplatform::loadPluginFromPath(boost::filesystem::path lib_path)
+{
+    if(!boost::filesystem::exists(lib_path))
+    {
+        return;
+    }
+
+    for(auto& file_path : boost::make_iterator_range(boost::filesystem::directory_iterator(lib_path), {}))
+    {
+        boost::dll::shared_library lib(file_path, boost::dll::load_mode::append_decorations);
+        if (!lib.has("get_factory")) {
+            // no such symbol
+            continue;
+        }
+        // create pointer on function
+        typedef boost::shared_ptr<PluginEntrypoint> (entrypoint_create_t)();
+        boost::function<entrypoint_create_t> creator;
+        creator = boost::dll::import_alias<entrypoint_create_t>(
+            file_path,
+            "get_factory",
+            boost::dll::load_mode::append_decorations
+        );
+        // call the plugin and get the factory
+        boost::shared_ptr<PluginEntrypoint> plugin_instance = creator();
+        BSFMap pluginFactoryMap = plugin_instance->getInformationAndFactory();
+        mFactories.insert(pluginFactoryMap.begin(),pluginFactoryMap.end());
+    }
 }
 
 // ============================================================================
@@ -116,11 +160,11 @@ void Metaplatform::clearReloadableInterfaces()
 void Metaplatform::generateInterfacesFromTreeFile()
 {
     // Try to open the file
-    std::ifstream config_file("/etc/panduza/tree.json", std::ifstream::binary);
+    std::ifstream config_file("/etc/panduza/tree/tree.json", std::ifstream::binary);
     if (!config_file.is_open())
     {
-        LOG_F(ERROR, "Config file not found in /etc/panduza");
-        return;
+        LOG_F(ERROR, "Config file not found in /etc/panduza/tree, exiting...");
+        exit(0);
     }
     LOG_F(1, "Config file found in /etc/panduza/");
 
@@ -202,11 +246,30 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
     // Initializing the meta driver instance
     LOG_F(5, "Driver %s created, initializing variables...", driver_name.c_str());
-    LOG_F(ERROR, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
+    LOG_F(INFO, "datas are : %s, %s, %s, %s, %s", mMachineName.c_str(), broker_name.c_str(), broker_addr.c_str(), broker_port.c_str(), interface_json.toStyledString().c_str());
     driver_instance->initialize(mMachineName, broker_name, broker_addr, broker_port, interface_json);
 
     LOG_F(5, "Driver %s initialized.", driver_name.c_str());
 
     // Append the created interface to the intefraces managed by the platform
     mDriverInstancesStatic.emplace_back(driver_instance);
+}
+
+void Metaplatform::autodetectInterfaces()
+{
+    LOG_F(INFO, "AUTODETECT MODE ENABLED");
+    std::ofstream file;
+    Json::Value json;
+    
+    file.open("/etc/panduza/platform/cxx.json");
+
+    for (auto mFactory: mFactories)
+    {
+        LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
+        json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+    }
+
+    file << json.toStyledString() << std::endl;
+
+    file.close();
 }

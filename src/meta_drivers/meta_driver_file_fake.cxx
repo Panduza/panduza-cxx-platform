@@ -10,9 +10,9 @@ MetaDriverFileFake::MetaDriverFileFake(){}
 void MetaDriverFileFake::setup()
 {
     // Subscribe to the different topic needed direction and value separated because of retained not coming in the good order
-    subscribe(getBaseTopic() + "/Bsdl_File/cmds/#", 0);
-    subscribe(getBaseTopic() + "/Bsdl_File/atts/content", 0);
-    subscribe(getBaseTopic() + "/Bsdl_File/atts/data", 0);
+    subscribe(getBaseTopic() + "/cmds/#", 0);
+    subscribe(getBaseTopic() + "/atts/content", 0);
+    subscribe(getBaseTopic() + "/atts/data", 0);
 
     LOG_F(ERROR, "%s.bsdl",getDriverName().c_str());
     // Try to open the BSDL
@@ -39,7 +39,7 @@ void MetaDriverFileFake::sendInfo()
     LOG_F(4, "Info sent is : %s", info.toStyledString().c_str());
 
     // publish the message info to the mqtt server for the pin
-    publish(getBaseTopic() + "/Bsdl_File/info", info, 0, false);
+    publish(getBaseTopic() + "/info", info, 0, false);
 }
 
 // ============================================================================
@@ -80,8 +80,8 @@ void MetaDriverFileFake::message_arrived(mqtt::const_message_ptr msg)
             payload["crc"] = crc32hex.str();
             
             // Send payloads to atts
-            publish(getBaseTopic() + "/Bsdl_File/atts/metadata", payload, 0, true);
-            publish(getBaseTopic() + "/Bsdl_File/atts/content", parsedMsg, 0, true);
+            publish(getBaseTopic() + "/atts/metadata", payload, 0, true);
+            publish(getBaseTopic() + "/atts/content", parsedMsg, 0, true);
 
             // Get encoded message
             std::string encoded_message = parsedMsg["data"].asString();
@@ -96,6 +96,25 @@ void MetaDriverFileFake::message_arrived(mqtt::const_message_ptr msg)
             BSDLFile.close();
         }
     }
+}
+
+Json::Value MetaDriverFileFake::generateAutodetectInfo()
+{
+    Json::Value json;
+    Json::Value template_json;
+
+    template_json["name"] = "FILE";
+    template_json["driver"] = "file_fake";
+    template_json["settings"]["behaviour"] = "manual";
+
+
+    json["name"] = "file_fake";
+    json["version"] = "1.0";
+    json["description"] = "Fake file interface";
+    json["template"] = template_json;
+    json["autodetect"] = Json::arrayValue;
+
+    return json;
 }
 
 // ============================================================================

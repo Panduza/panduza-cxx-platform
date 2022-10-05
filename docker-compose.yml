@@ -1,0 +1,27 @@
+version: '3'  
+
+services: 
+  panduza-platform:
+    container_name: panduza-cxx-platform
+    image: ghcr.io/panduza/panduza-cxx-platform:v1.0.0
+    network_mode: host
+    privileged: true
+    environment:
+      - AUTODETECT
+    volumes:
+      - ./panduza/:/etc/panduza/tree
+      - ./logs:/panduza-cxx-platform/logs
+      - ./BoundaryScan:/etc/panduza/BoundaryScan
+      - ./platform:/etc/panduza/platform
+    
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto-data/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+# to send a env variable to docker-compose, you need to write it before the command.
+# eg: AUTODETECT=1 docker-compose up
