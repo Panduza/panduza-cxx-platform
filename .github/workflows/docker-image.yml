@@ -11,9 +11,9 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['structuration-examples-artys7']
+    branches: ['main']
   pull_request:
-    branches: ['structuration-examples-artys7']
+    branches: ['main']
 
 env:
   REGISTRY: ghcr.io
@@ -42,7 +42,7 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: type=raw, value=testing
+          tags: type=raw, value=v1.0.0
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc

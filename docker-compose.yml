@@ -3,7 +3,7 @@ version: '3'
 services: 
   panduza-platform:
     container_name: panduza-cxx-platform
-    image: ghcr.io/panduza/panduza-cxx-platform:latest
+    image: ghcr.io/panduza/panduza-cxx-platform:v1.0.0
     network_mode: host
     privileged: true
     environment:

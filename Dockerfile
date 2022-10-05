@@ -33,7 +33,6 @@ RUN usermod -a -G usb root
 WORKDIR /
 RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
 WORKDIR /panduza-cxx-platform
-RUN git checkout origin/structuration-examples-artys7
 
 COPY ./start-platform.sh /
 RUN chmod +x /start-platform.sh
@@ -52,7 +51,6 @@ RUN ldconfig
 WORKDIR /home/builder
 RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
 WORKDIR /home/builder/panduza-cxx-class-boundary-scan
-RUN git checkout origin/structuration-examples-artys7
 
 RUN mkdir -p build
 WORKDIR /home/builder/panduza-cxx-class-boundary-scan/build
