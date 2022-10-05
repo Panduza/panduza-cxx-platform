@@ -9,7 +9,7 @@ services:
     environment:
       - AUTODETECT
     volumes:
-      - ./panduza/tree.json:/etc/panduza/tree.json
+      - ./panduza/:/etc/panduza/tree
       - ./logs:/panduza-cxx-platform/logs
       - ./BoundaryScan:/etc/panduza/BoundaryScan
       - ./platform:/etc/panduza/platform
