@@ -135,8 +135,6 @@ private:
 
     mqtt::connect_options connOpts;
 
-    std::string mBehaviour;
-
     std::mutex mPubMutex;
 };
 
