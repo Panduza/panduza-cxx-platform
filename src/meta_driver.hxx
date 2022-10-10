@@ -85,10 +85,6 @@ public:
     void setBaseTopicCmds() { mBaseTopicCmd = mBaseTopic + "/cmds"; };
     /// Setter of the base attributs topic
     void setBaseTopicAtts() { mBaseTopicAtts = mBaseTopic + "/atts"; };
-    /// Setter of the behaviour parameter
-    void setBehaviour();
-    /// Setter of the behaviour parameter by defining the parameter @param behaviour Behaviour of the meta driver
-    void setBehaviour(std::string behaviour) { mBehaviour = behaviour; };
     /// Getter of the interface tree @return Interface tree in Json format
     const Json::Value &getInterfaceTree() const { return mInterfaceTree; };
     /// Getter of the machine name @return Name of the machine
@@ -109,8 +105,6 @@ public:
     const std::string &getBaseTopicCmds() const { return mBaseTopicCmd; };
     /// Getter of the base attributs topic @return Base attributs topic of the interface
     const std::string &getBaseTopicAtts() const { return mBaseTopicAtts; };
-    /// Getter of the behaviour parameter @return behaviour configured
-    const std::string &getBehaviour() const { return mBehaviour; };
     /// Getter of the Mqtt Client @return Shared ptr of the MQTT Client
     const std::shared_ptr<mqtt::async_client> &getClientMqtt() const { return mClientMqtt; };
 

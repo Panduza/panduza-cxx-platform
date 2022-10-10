@@ -35,6 +35,12 @@ public:
     /// @param value value of the IO to set
     void setValue(int value) { mValue = value; };
 
+    /// Setter of the behaviour parameter by defining the parameter @param behaviour Behaviour of the meta driver
+    void setBehaviour(std::string behaviour) { mBehaviour = behaviour; };
+    
+    /// Getter of the behaviour parameter @return behaviour configured
+    const std::string &getBehaviour() const { return mBehaviour; };
+
     /// create an alternative thread to launch
     /// @return Shared ptr of the thread to launch in parallel
     std::shared_ptr<std::thread> createAlternativeThread();
@@ -47,6 +53,8 @@ private:
 
     std::string mDirection = "in";
     int mValue = 1;
+
+    std::string mBehaviour;
 };
 
 /// Fake io meta driver factory for testing
