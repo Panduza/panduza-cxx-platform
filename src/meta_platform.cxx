@@ -48,7 +48,6 @@ int Metaplatform::run()
     // \todo Change this
     mFactories["io_fake"] = new MetaDriverFactoryIoFake();
     mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
-    mFactories["file_fake"] = new MetaDriverFactoryFileFake();
     // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
