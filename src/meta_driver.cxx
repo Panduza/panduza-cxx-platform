@@ -135,28 +135,12 @@ void MetaDriver::subscribe(std::string topic, int qoS)
     getClientMqtt()->subscribe(topic, qoS, nullptr, *this);
 }
 
-void MetaDriver::setBehaviour()
-{
-    // check the behaviour and set into the variable of the instance of the meta driver
-    if (!mInterfaceTree["settings"]["behaviour"].isNull())
-    {
-        LOG_F(5, "Behaviour detected : %s", mInterfaceTree["settings"]["behaviour"].asString().c_str());
-        mBehaviour = mInterfaceTree["settings"]["behaviour"].asString();
-    }
-    else
-    {
-        // If no behaviour, set to static
-        LOG_F(5, "No behaviour detected, switch to static");
-        mBehaviour = "static";
-    }
-}
-
 void MetaDriver::run()
 {
     LOG_F(5, "Starting Meta Driver run function");
 
     // create the meta driver clientMqtt and git some connection option
-    mClientMqtt = std::make_shared<mqtt::async_client>(mBrokerAddr, mClientID);
+    mClientMqtt = std::make_shared<mqtt::async_client>(mBrokerAddr + ":" + mBrokerPort, mClientID);
     connOpts = mqtt::connect_options_builder()
                    .clean_session()
                    .finalize();
@@ -208,7 +192,6 @@ void MetaDriver::initialize(std::string machine_name, std::string broker_name, s
     setBaseTopic();
     setBaseTopicCmds();
     setBaseTopicAtts();
-    setBehaviour();
 
     // log for verification
     LOG_F(6, "Variables added : Machine name = %s", mMachineName.c_str());

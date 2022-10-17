@@ -48,7 +48,6 @@ int Metaplatform::run()
     // \todo Change this
     mFactories["io_fake"] = new MetaDriverFactoryIoFake();
     mFactories["psu_fake"] = new MetaDriverFactoryPsuFake();
-    mFactories["file_fake"] = new MetaDriverFactoryFileFake();
     // mFactories["Scan_service"] = new MetaDriverFactoryFT2232BoundaryScan();
     
     // Create base path to load the plugin
@@ -78,6 +77,12 @@ int Metaplatform::run()
     // start the whole process of creating instances from the tree
     generateInterfacesFromTreeFile();
     LOG_F(8, "Number of Instances : %ld", getStaticInterfaces().size());
+
+    if(getStaticInterfaces().size() <= 0)
+    {
+        LOG_F(ERROR, "No instances to load from the tree, exiting...");
+        exit(0);
+    }
 
     // loop into the interfaces created and run all interfaces
     for (const auto &interface : getStaticInterfaces())
@@ -257,7 +262,6 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
 void Metaplatform::autodetectInterfaces()
 {
-    LOG_F(INFO, "AUTODETECT MODE ENABLED");
     std::ofstream file;
     Json::Value json;
     
