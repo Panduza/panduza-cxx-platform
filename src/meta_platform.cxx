@@ -262,7 +262,6 @@ void Metaplatform::loadMetaDriver(Json::Value interface_json, std::string broker
 
 void Metaplatform::autodetectInterfaces()
 {
-    LOG_F(INFO, "AUTODETECT MODE ENABLED");
     std::ofstream file;
     Json::Value json;
     
