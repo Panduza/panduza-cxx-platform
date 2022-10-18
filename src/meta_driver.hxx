@@ -110,6 +110,8 @@ public:
 
     virtual Json::Value generateAutodetectInfo();
 
+    void sendErrorMessageToMqtt(std::string message);
+
 private:
     /// The maximum number of retry
     int mRetry = 5;

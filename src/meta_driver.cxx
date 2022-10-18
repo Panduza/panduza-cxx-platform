@@ -95,6 +95,7 @@ void MetaDriver::publish(std::string topic, Json::Value payload, int qoS, bool r
         message->set_retained(retained);
 
         // Log the message to send
+        LOG_F(8, "The topic is : %s", topic.c_str());
         LOG_F(8, "Set QoS to : %d and Retained to : %d", qoS, retained);
         LOG_F(8, "QoS added to message");
         LOG_F(8, "Payload is : %s", payload.toStyledString().c_str());
@@ -223,5 +224,17 @@ void MetaDriver::setBaseTopic()
 }    
 
 Json::Value MetaDriver::generateAutodetectInfo(){};
+
+void MetaDriver::sendErrorMessageToMqtt(std::string message)
+{
+    std::string topic = "pza/" + mMachineName + "/error";
+    Json::Value payload;
+    payload["plugin"] = mDriverName;
+    payload["error message"] = message;
+
+    publish(topic, payload, 0, 1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    exit(1);
+}
 
 std::shared_ptr<MetaDriver> MetaDriverFactory::createDriver(void *arg){};
