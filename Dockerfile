@@ -1,4 +1,5 @@
 FROM ubuntu:20.04
+ARG TAG
 
 ENV TZ=Europe/Paris
 
@@ -31,7 +32,7 @@ RUN groupadd usb
 RUN usermod -a -G usb root
 
 WORKDIR /
-RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
+COPY / /panduza-cxx-platform
 WORKDIR /panduza-cxx-platform
 
 COPY ./start-platform.sh /
@@ -49,7 +50,7 @@ RUN cp -R _deps/paho.mqtt.cpp-src /usr/share/panduza-cxx/includes
 RUN ldconfig
 
 WORKDIR /home/builder
-RUN git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git
+RUN if [ -z "$TAG" ] ; then git clone https://github.com/Panduza/panduza-cxx-class-boundary-scan.git ; else git clone --branch $TAG https://github.com/Panduza/panduza-cxx-class-boundary-scan.git ; fi
 WORKDIR /home/builder/panduza-cxx-class-boundary-scan
 
 RUN mkdir -p build
