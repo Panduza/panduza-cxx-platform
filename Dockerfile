@@ -31,7 +31,7 @@ RUN groupadd usb
 RUN usermod -a -G usb root
 
 WORKDIR /
-RUN git clone https://github.com/Panduza/panduza-cxx-platform.git
+COPY / /panduza-cxx-platform
 WORKDIR /panduza-cxx-platform
 
 COPY ./start-platform.sh /
