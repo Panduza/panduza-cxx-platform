@@ -57,9 +57,5 @@ RUN mkdir -p build
 WORKDIR /home/builder/panduza-cxx-class-boundary-scan/build
 RUN cmake .. && make install
 
-RUN mkdir /etc/panduza
-RUN cp /home/builder/panduza-cxx-class-boundary-scan/examples/elsys-board-arty-s7/panduza/tree.json /etc/panduza
-
-
 WORKDIR /
 ENTRYPOINT ["./start-platform.sh"]
