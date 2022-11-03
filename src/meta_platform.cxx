@@ -168,10 +168,10 @@ void Metaplatform::generateInterfacesFromTreeFile()
     std::ifstream config_file("/etc/panduza/data/tree/tree.json", std::ifstream::binary);
     if (!config_file.is_open())
     {
-        LOG_F(ERROR, "Config file not found in /etc/panduza/tree, exiting...");
+        LOG_F(ERROR, "Config file not found in /etc/panduza/data/tree, exiting...");
         exit(0);
     }
-    LOG_F(1, "Config file found in /etc/panduza/");
+    LOG_F(1, "Config file found in /etc/panduza/data/");
 
     // Parse config and store it
     Json::Value config_json;
