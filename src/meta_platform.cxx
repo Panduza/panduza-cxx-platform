@@ -63,10 +63,10 @@ int Metaplatform::run()
     {
         char *AUTODETECT = std::getenv("AUTODETECT");
         int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
-        LOG_F(ERROR,"env : %d", autodetect_int);
+
         if(autodetect_int == 1)
         {
-            LOG_F(ERROR,"GOING INTO AUTODETECT");
+            LOG_F(INFO,"GOING INTO AUTODETECT");
             autodetectInterfaces();
 
             LOG_F(INFO, "Available interfaces template generated, stopping the program...");
