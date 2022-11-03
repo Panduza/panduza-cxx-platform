@@ -265,15 +265,24 @@ void Metaplatform::autodetectInterfaces()
     std::ofstream file;
     Json::Value json;
     
+    boost::filesystem::create_directory("/etc/panduza/platform");
     file.open("/etc/panduza/platform/cxx.json");
 
-    for (auto mFactory: mFactories)
+    if(file.is_open())
     {
-        LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
-        json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+        for (auto mFactory: mFactories)
+        {
+            LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
+            json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+        }
+
+        file << json.toStyledString() << std::endl;
+
+        file.close();
     }
-
-    file << json.toStyledString() << std::endl;
-
-    file.close();
+    else
+    {
+        LOG_F(ERROR, "File not created...");
+        exit(1);
+    }
 }
