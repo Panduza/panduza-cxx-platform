@@ -165,7 +165,7 @@ void Metaplatform::loadPluginFromPath(boost::filesystem::path lib_path)
 void Metaplatform::generateInterfacesFromTreeFile()
 {
     // Try to open the file
-    std::ifstream config_file("/etc/panduza/tree/tree.json", std::ifstream::binary);
+    std::ifstream config_file("/etc/panduza/data/tree/tree.json", std::ifstream::binary);
     if (!config_file.is_open())
     {
         LOG_F(ERROR, "Config file not found in /etc/panduza/tree, exiting...");
