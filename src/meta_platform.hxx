@@ -79,7 +79,7 @@ public:
 
     /// @brief Add Meta Driver into reloadable list
     /// @param driver_instance Instance of a Meta Driver
-    void addReloadableDriverInstance(std::map<std::string,std::list<std::shared_ptr<MetaDriver>>> driver_instance) {LOG_F(ERROR, "%s", driver_instance.begin()->first.c_str()); mDriverInstancesReloadableToLoad.emplace(driver_instance.begin()->first,driver_instance.begin()->second); }
+    void addReloadableDriverInstance(std::map<std::string,std::list<std::shared_ptr<MetaDriver>>> driver_instance) {mDriverInstancesReloadableToLoad.emplace(driver_instance.begin()->first,driver_instance.begin()->second); }
 
     /// @brief Clear reloadable meta driver list
     void clearReloadableInterfaces(std::string key_list_to_reload);

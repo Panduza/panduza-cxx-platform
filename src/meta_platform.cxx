@@ -63,10 +63,10 @@ int Metaplatform::run()
     {
         char *AUTODETECT = std::getenv("AUTODETECT");
         int autodetect_int = (*AUTODETECT) - 48; //as 0 is 48 and 1 is 49 in ascii
-        LOG_F(ERROR,"env : %d", autodetect_int);
+
         if(autodetect_int == 1)
         {
-            LOG_F(ERROR,"GOING INTO AUTODETECT");
+            LOG_F(INFO,"GOING INTO AUTODETECT");
             autodetectInterfaces();
 
             LOG_F(INFO, "Available interfaces template generated, stopping the program...");
@@ -265,15 +265,24 @@ void Metaplatform::autodetectInterfaces()
     std::ofstream file;
     Json::Value json;
     
+    boost::filesystem::create_directory("/etc/panduza/platform");
     file.open("/etc/panduza/platform/cxx.json");
 
-    for (auto mFactory: mFactories)
+    if(file.is_open())
     {
-        LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
-        json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+        for (auto mFactory: mFactories)
+        {
+            LOG_F(3, "Generating template interface for %s", mFactory.first.c_str());
+            json["drivers"].append(mFactory.second->createDriver(this)->generateAutodetectInfo());
+        }
+
+        file << json.toStyledString() << std::endl;
+
+        file.close();
     }
-
-    file << json.toStyledString() << std::endl;
-
-    file.close();
+    else
+    {
+        LOG_F(ERROR, "File not created...");
+        exit(1);
+    }
 }
