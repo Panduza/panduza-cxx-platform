@@ -9,4 +9,6 @@ fi
 
 cd /panduza-cxx-platform/build
 
-./panduza-cxx-platform -v 9
+./panduza-cxx-platform
+
+/bin/bash
