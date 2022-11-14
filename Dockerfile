@@ -40,7 +40,7 @@ RUN chmod +x /start-platform.sh
 
 RUN mkdir -p build
 WORKDIR /panduza-cxx-platform/build
-RUN cmake .. && make install 
+RUN cmake -DPAHO_WITH_SSL=ON .. && make install 
 RUN mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.c-src
 RUN mkdir -p /usr/share/panduza-cxx/includes/paho.mqtt.cpp-src
 

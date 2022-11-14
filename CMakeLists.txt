@@ -33,8 +33,6 @@ include(cmake/dependencies.cmake)
 
 #initialize the PAHO C variables
 set(PAHO_BUILD_SHARED TRUE)
-set(PAHO_WITH_SSL TRUE)
-# set(PAHO_HIGH_PERFORMANCE TRUE)
 
 # fetch PAHO C
 FetchContent_MakeAvailable(paho.mqtt.c)
