@@ -1,4 +1,3 @@
-
 FetchContent_Declare(
     paho.mqtt.c
     GIT_REPOSITORY https://github.com/eclipse/paho.mqtt.c.git
